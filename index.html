@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CupPulse</title>
+
+  <style>
+    :root {
+      --bg: #030712;
+      --panel: #08111f;
+      --panel-2: #0c1729;
+      --line: rgba(148, 163, 184, 0.22);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --blue: #2f81ff;
+      --cyan: #22d3ee;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --red: #ef4444;
+      --purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(47, 129, 255, 0.18), transparent 35%),
+        radial-gradient(circle at top right, rgba(168, 85, 247, 0.14), transparent 35%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app {
+      min-height: 100vh;
+    }
+
+    .nav {
+      height: 72px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-size: 26px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      box-shadow: 0 0 35px rgba(47, 129, 255, 0.45);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-links span.active {
+      color: var(--text);
+    }
+
+    .nav-pill {
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .container {
+      width: min(1480px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+      padding: 42px 0 28px;
+      align-items: stretch;
+    }
+
+    .hero-main {
+      position: relative;
+      min-height: 390px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 42px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(3, 7, 18, 0.98) 0%, rgba(3, 7, 18, 0.8) 45%, rgba(3, 7, 18, 0.3) 100%),
+        radial-gradient(circle at 75% 45%, rgba(47, 129, 255, 0.4), transparent 35%),
+        linear-gradient(135deg, #07101f, #111827);
+    }
+
+    .hero-main::after {
+      content: "⚽";
+      position: absolute;
+      right: 70px;
+      top: 55px;
+      font-size: 180px;
+      opacity: 0.08;
+      transform: rotate(-14deg);
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(52px, 7vw, 92px);
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      text-transform: uppercase;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #60a5fa, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 22px 0 28px;
+      max-width: 570px;
+      color: #cbd5e1;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .search-row {
+      display: flex;
+      width: min(560px, 100%);
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.88);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .search-row input {
+      flex: 1;
+      background: transparent;
+      border: 0;
+      padding: 17px 18px;
+      color: var(--text);
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-row button {
+      width: 58px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      background: rgba(47, 129, 255, 0.16);
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .trending {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .trend-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.58);
+      color: #dbeafe;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .snapshot {
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 28px;
+      background:
+        radial-gradient(circle at top, rgba(47, 129, 255, 0.22), transparent 42%),
+        var(--panel);
+    }
+
+    .snapshot h3 {
+      margin: 0 0 20px;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+
+    .world-map {
+      height: 175px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,0.14);
+      font-size: 84px;
+      background:
+        radial-gradient(circle at 35% 45%, rgba(34, 211, 238, 0.16), transparent 30%),
+        radial-gradient(circle at 70% 40%, rgba(250, 204, 21, 0.12), transparent 30%),
+        rgba(2, 6, 23, 0.55);
+    }
+
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .mini-stat {
+      border-left: 1px solid var(--line);
+      padding-left: 14px;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 30px;
+      letter-spacing: -0.06em;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .section h2 {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: -0.05em;
+      font-size: 32px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    select,
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.78);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 800;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .teams-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .team-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      background:
+        linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.92)),
+        var(--panel);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.75);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    .team-rank {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(96, 165, 250, 0.55);
+      color: #93c5fd;
+      border-radius: 8px;
+      font-weight: 900;
+      background: rgba(37, 99, 235, 0.15);
+    }
+
+    .team-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-left: 28px;
+    }
+
+    .flag {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 27px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--line);
+    }
+
+    .team-name {
+      font-size: 20px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+    }
+
+    .group {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      margin: 26px 0 20px;
+    }
+
+    .score-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .score {
+      font-size: 54px;
+      line-height: 0.85;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+    }
+
+    .trend {
+      color: var(--green);
+      font-size: 13px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      gap: 8px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .stat strong {
+      font-size: 18px;
+    }
+
+    .view-btn {
+      margin-top: 16px;
+      width: 100%;
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      background: rgba(37, 99, 235, 0.12);
+      color: #bfdbfe;
+      border-radius: 10px;
+      padding: 12px;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 950;
+      cursor: pointer;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      background: rgba(8, 17, 31, 0.82);
+    }
+
+    .panel h3 {
+      margin: 0 0 16px;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+    }
+
+    .leader-row {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .leader-row:last-child {
+      border-bottom: 0;
+    }
+
+    .leader-row small {
+      color: var(--muted);
+    }
+
+    .leader-row strong:last-child {
+      color: #86efac;
+    }
+
+    .cta-panel {
+      background:
+        radial-gradient(circle at top right, rgba(47, 129, 255, 0.35), transparent 40%),
+        linear-gradient(135deg, rgba(37, 99, 235, 0.32), rgba(15, 23, 42, 0.95));
+    }
+
+    .cta-panel button {
+      width: 100%;
+      margin-top: 14px;
+      border: 0;
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--blue), #4f46e5);
+      color: white;
+      font-weight: 950;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin: 24px 0 44px;
+    }
+
+    .feature {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(8, 17, 31, 0.75);
+    }
+
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .feature strong {
+      display: block;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .feature span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .team-page {
+      display: none;
+      padding: 30px 0 50px;
+    }
+
+    .team-hero {
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 34px;
+      min-height: 310px;
+      background:
+        linear-gradient(90deg, rgba(3, 7, 18, 0.98), rgba(3, 7, 18, 0.62)),
+        radial-gradient(circle at 80% 35%, rgba(47, 129, 255, 0.35), transparent 34%),
+        var(--panel);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-hero::after {
+      content: attr(data-flag);
+      position: absolute;
+      right: 60px;
+      top: 28px;
+      font-size: 190px;
+      opacity: 0.12;
+    }
+
+    .back-btn {
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.75);
+      color: #bfdbfe;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-weight: 900;
+      cursor: pointer;
+      margin-bottom: 18px;
+    }
+
+    .team-hero h1 {
+      margin: 0;
+      font-size: clamp(52px, 7vw, 96px);
+      letter-spacing: -0.08em;
+      line-height: 0.9;
+      text-transform: uppercase;
+    }
+
+    .team-hero p {
+      color: #cbd5e1;
+      max-width: 640px;
+      line-height: 1.6;
+      font-size: 17px;
+    }
+
+    .hero-cards {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      background: rgba(2, 6, 23, 0.6);
+    }
+
+    .hero-card span {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 950;
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 34px;
+      letter-spacing: -0.07em;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.35fr 0.9fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .ring {
+      width: 190px;
+      height: 190px;
+      margin: 8px auto 22px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle, #08111f 52%, transparent 53%),
+        conic-gradient(var(--blue) 0deg, var(--cyan) 342deg, rgba(148, 163, 184, 0.16) 342deg);
+      border: 1px solid var(--line);
+    }
+
+    .ring strong {
+      font-size: 58px;
+      letter-spacing: -0.08em;
+    }
+
+    .bars {
+      display: grid;
+      gap: 13px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 130px 1fr 38px;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    .bar-track {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.16);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: var(--w);
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      border-radius: 999px;
+    }
+
+    .player-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .player-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(15, 23, 42, 0.72);
+    }
+
+    .player-face {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(47, 129, 255, 0.6), rgba(168, 85, 247, 0.45));
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .player-card strong {
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .player-card span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .heat {
+      float: right;
+      color: #93c5fd;
+      font-weight: 950;
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      padding: 4px 7px;
+      border-radius: 8px;
+    }
+
+    .match {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .match:last-child {
+      border-bottom: 0;
+    }
+
+    .risk {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .risk:last-child {
+      border-bottom: 0;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .medium {
+      color: #fde68a;
+      background: rgba(250, 204, 21, 0.12);
+    }
+
+    .low {
+      color: #86efac;
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    @media (max-width: 1150px) {
+      .hero,
+      .main-grid,
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .teams-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .feature-row,
+      .hero-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        width: min(100% - 28px, 1480px);
+      }
+
+      .nav {
+        padding: 0 16px;
+      }
+
+      .hero-main,
+      .snapshot,
+      .team-hero {
+        padding: 24px;
+      }
+
+      .teams-grid,
+      .player-grid,
+      .feature-row,
+      .hero-cards,
+      .snapshot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .score {
+        font-size: 44px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header class="nav">
+      <div class="brand">
+        <div class="brand-mark">🏆</div>
+        <span>CupPulse</span>
+      </div>
+
+      <nav class="nav-links">
+        <span class="active">Home</span>
+        <span>Teams</span>
+        <span>Players</span>
+        <span>Matches</span>
+        <span>Groups</span>
+        <span>Rankings</span>
+        <span>Insights</span>
+      </nav>
+
+      <div class="nav-pill">World Cup 2026</div>
+    </header>
+
+    <main id="homePage" class="container">
+      <section class="hero">
+        <div class="hero-main">
+          <div class="eyebrow">World Cup 2026 Analytics Hub</div>
+          <h1>
+            Explore Every <span class="gradient-text">Team.</span><br />
+            Track Every <span class="gradient-text">Pulse.</span>
+          </h1>
+          <p>
+            Dive into every World Cup team page with player heat, squad depth,
+            tactical insights, matchup edges, and knockout-readiness signals.
+          </p>
+
+          <div class="search-row">
+            <input id="searchInput" placeholder="Search for a team..." />
+            <button id="searchBtn">⌕</button>
+          </div>
+
+          <div class="trending" id="trendingTeams"></div>
+        </div>
+
+        <aside class="snapshot">
+          <h3>Tournament Snapshot</h3>
+          <div class="world-map">🌎</div>
+
+          <div class="snapshot-grid">
+            <div class="mini-stat">
+              <strong>48</strong>
+              <span>Teams</span>
+            </div>
+            <div class="mini-stat">
+              <strong>104</strong>
+              <span>Matches</span>
+            </div>
+            <div class="mini-stat">
+              <strong>12</strong>
+              <span>Groups</span>
+            </div>
+            <div class="mini-stat">
+              <strong>3</strong>
+              <span>Hosts</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>All Teams</h2>
+
+          <div class="filters">
+            <select id="regionFilter">
+              <option value="All">All Regions</option>
+              <option value="UEFA">UEFA</option>
+              <option value="CONMEBOL">CONMEBOL</option>
+              <option value="CONCACAF">CONCACAF</option>
+              <option value="CAF">CAF</option>
+              <option value="AFC">AFC</option>
+            </select>
+
+            <select id="sortFilter">
+              <option value="pulse">Sort by Pulse Score</option>
+              <option value="attack">Sort by Attack</option>
+              <option value="defense">Sort by Defense</option>
+              <option value="depth">Sort by Depth</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="main-grid">
+          <div>
+            <div class="teams-grid" id="teamsGrid"></div>
+
+            <div class="feature-row">
+              <div class="feature">
+                <div class="feature-icon">🌊</div>
+                <strong>Pulse Scores</strong>
+                <span>Opponent-adjusted team ratings updated by form and matchup context.</span>
+              </div>
+
+              <div class="feature">
+                <div class="feature-icon">🔥</div>
+                <strong>Player Heat</strong>
+                <span>Track star form, role impact, and rising tournament threats.</span>
+              </div>
+
+              <div class="feature">
+                <div class="feature-icon">⚔️</div>
+                <strong>Matchup Edges</strong>
+                <span>See where each team creates tactical advantages.</span>
+              </div>
+
+              <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <strong>Group Analysis</strong>
+                <span>Group difficulty, upset signals, and advancement paths.</span>
+              </div>
+
+              <div class="feature">
+                <div class="feature-icon">🏆</div>
+                <strong>Knockout Tracker</strong>
+                <span>Simulate paths, pressure points, and title potential.</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="side-stack">
+            <div class="panel">
+              <h3>Top Pulse Teams</h3>
+              <div id="leaderboard"></div>
+            </div>
+
+            <div class="panel cta-panel">
+              <h3>Pick a team. Explore everything.</h3>
+              <p style="color:#cbd5e1; line-height:1.55;">
+                Open any team page to see a full contender dashboard with player heat,
+                tactical identity, match monitor, and risk flags.
+              </p>
+              <button onclick="scrollToTeams()">Choose a Team →</button>
+            </div>
+
+            <div class="panel">
+              <h3>What is Pulse Score?</h3>
+              <p style="color:#cbd5e1; line-height:1.55;">
+                Pulse Score combines attack, defense, squad depth, form trend,
+                transition threat, and knockout readiness into one rating.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <main id="teamPage" class="team-page container"></main>
+  </div>
+
+  <script>
+    const teams = [
+      {
+        name: "France",
+        flag: "🇫🇷",
+        group: "Group I",
+        region: "UEFA",
+        pulse: 95,
+        attack: 96,
+        defense: 91,
+        depth: 94,
+        transition: 95,
+        readiness: "A",
+        trend: "Rising",
+        star: "Kylian Mbappé",
+        identity: "Elite transition danger, squad depth, and knockout reliability.",
+        players: [
+          ["Kylian Mbappé", "Forward", 97],
+          ["Ousmane Dembélé", "Winger", 91],
+          ["William Saliba", "Defender", 89],
+          ["Aurélien Tchouaméni", "Midfield", 88],
+          ["Antoine Griezmann", "Creator", 87],
+          ["Eduardo Camavinga", "Utility", 86]
+        ],
+        matches: [
+          ["Senegal", "Physical test", "Transition speed"],
+          ["Iraq", "Control game", "Chance volume"],
+          ["Norway", "Star-power matchup", "Depth and structure"]
+        ]
+      },
+      {
+        name: "Brazil",
+        flag: "🇧🇷",
+        group: "Group C",
+        region: "CONMEBOL",
+        pulse: 92,
+        attack: 95,
+        defense: 88,
+        depth: 93,
+        transition: 94,
+        readiness: "A",
+        trend: "Rising",
+        star: "Vinícius Júnior",
+        identity: "Explosive wide play, creative flair, and elite attacking volume.",
+        players: [
+          ["Vinícius Júnior", "Winger", 96],
+          ["Rodrygo", "Forward", 90],
+          ["Bruno Guimarães", "Midfield", 88],
+          ["Éder Militão", "Defender", 87],
+          ["Alisson", "Goalkeeper", 86],
+          ["Raphinha", "Winger", 85]
+        ],
+        matches: [
+          ["Morocco", "Pressure test", "Wide overloads"],
+          ["Scotland", "Control game", "Box entries"],
+          ["Haiti", "Chance volume", "Attacking rhythm"]
+        ]
+      },
+      {
+        name: "Argentina",
+        flag: "🇦🇷",
+        group: "Group J",
+        region: "CONMEBOL",
+        pulse: 91,
+        attack: 93,
+        defense: 87,
+        depth: 91,
+        transition: 89,
+        readiness: "A",
+        trend: "Steady",
+        star: "Lionel Messi",
+        identity: "Control, experience, central combinations, and set-piece danger.",
+        players: [
+          ["Lionel Messi", "Creator", 94],
+          ["Lautaro Martínez", "Forward", 90],
+          ["Julián Álvarez", "Forward", 89],
+          ["Alexis Mac Allister", "Midfield", 88],
+          ["Cristian Romero", "Defender", 87],
+          ["Emiliano Martínez", "Goalkeeper", 86]
+        ],
+        matches: [
+          ["Algeria", "Compact opponent", "Tempo control"],
+          ["Austria", "Midfield battle", "Central overloads"],
+          ["Jordan", "Control game", "Set-piece edge"]
+        ]
+      },
+      {
+        name: "England",
+        flag: "🏴",
+        group: "Group K",
+        region: "UEFA",
+        pulse: 89,
+        attack: 88,
+        defense: 89,
+        depth: 90,
+        transition: 86,
+        readiness: "A-",
+        trend: "Rising",
+        star: "Jude Bellingham",
+        identity: "Midfield power, attacking depth, and strong defensive floor.",
+        players: [
+          ["Jude Bellingham", "Midfield", 94],
+          ["Harry Kane", "Forward", 91],
+          ["Bukayo Saka", "Winger", 90],
+          ["Declan Rice", "Midfield", 88],
+          ["Phil Foden", "Creator", 87],
+          ["John Stones", "Defender", 85]
+        ],
+        matches: [
+          ["Croatia", "Tournament test", "Midfield control"],
+          ["Ghana", "Athletic matchup", "Set pieces"],
+          ["Panama", "Control game", "Chance volume"]
+        ]
+      },
+      {
+        name: "Spain",
+        flag: "🇪🇸",
+        group: "Group L",
+        region: "UEFA",
+        pulse: 88,
+        attack: 90,
+        defense: 86,
+        depth: 89,
+        transition: 84,
+        readiness: "A-",
+        trend: "Rising",
+        star: "Lamine Yamal",
+        identity: "Possession control, technical quality, and final-third patience.",
+        players: [
+          ["Lamine Yamal", "Winger", 91],
+          ["Pedri", "Creator", 89],
+          ["Rodri", "Midfield", 92],
+          ["Nico Williams", "Winger", 88],
+          ["Dani Olmo", "Creator", 86],
+          ["Aymeric Laporte", "Defender", 84]
+        ],
+        matches: [
+          ["Uruguay", "High-level test", "Possession control"],
+          ["Saudi Arabia", "Control game", "Wide creation"],
+          ["Cape Verde", "Low block", "Final-third patience"]
+        ]
+      },
+      {
+        name: "Portugal",
+        flag: "🇵🇹",
+        group: "Group H",
+        region: "UEFA",
+        pulse: 87,
+        attack: 88,
+        defense: 84,
+        depth: 88,
+        transition: 87,
+        readiness: "B+",
+        trend: "Steady",
+        star: "Bruno Fernandes",
+        identity: "Creative passing, technical attackers, and high individual upside.",
+        players: [
+          ["Bruno Fernandes", "Creator", 91],
+          ["Bernardo Silva", "Creator", 89],
+          ["Rafael Leão", "Winger", 88],
+          ["Cristiano Ronaldo", "Forward", 87],
+          ["Rúben Dias", "Defender", 86],
+          ["Diogo Costa", "Goalkeeper", 85]
+        ],
+        matches: [
+          ["Colombia", "Chaos game", "Creative passing"],
+          ["Uzbekistan", "Control game", "Final-third pressure"],
+          ["DR Congo", "Physical test", "Technical edge"]
+        ]
+      },
+      {
+        name: "Germany",
+        flag: "🇩🇪",
+        group: "Group E",
+        region: "UEFA",
+        pulse: 86,
+        attack: 87,
+        defense: 84,
+        depth: 86,
+        transition: 82,
+        readiness: "B+",
+        trend: "Steady",
+        star: "Jamal Musiala",
+        identity: "Technical midfield play, chance creation, and structured possession.",
+        players: [
+          ["Jamal Musiala", "Creator", 91],
+          ["Florian Wirtz", "Creator", 90],
+          ["Kai Havertz", "Forward", 86],
+          ["Joshua Kimmich", "Midfield", 85],
+          ["Antonio Rüdiger", "Defender", 84],
+          ["Marc-André ter Stegen", "Goalkeeper", 84]
+        ],
+        matches: [
+          ["Ecuador", "Pressing test", "Central creation"],
+          ["Côte d'Ivoire", "Physical test", "Possession structure"],
+          ["New Zealand", "Control game", "Chance volume"]
+        ]
+      },
+      {
+        name: "Netherlands",
+        flag: "🇳🇱",
+        group: "Group G",
+        region: "UEFA",
+        pulse: 85,
+        attack: 84,
+        defense: 88,
+        depth: 86,
+        transition: 85,
+        readiness: "B+",
+        trend: "Rising",
+        star: "Virgil van Dijk",
+        identity: "Defensive structure, aerial power, and direct attacking outlets.",
+        players: [
+          ["Virgil van Dijk", "Defender", 90],
+          ["Frenkie de Jong", "Midfield", 88],
+          ["Cody Gakpo", "Forward", 87],
+          ["Xavi Simons", "Creator", 86],
+          ["Denzel Dumfries", "Wingback", 84],
+          ["Matthijs de Ligt", "Defender", 83]
+        ],
+        matches: [
+          ["Belgium", "Derby test", "Defensive structure"],
+          ["Japan", "Tempo test", "Aerial edge"],
+          ["Tunisia", "Control game", "Direct outlets"]
+        ]
+      }
+    ];
+
+    let currentSearch = "";
+    let currentRegion = "All";
+    let currentSort = "pulse";
+
+    const homePage = document.getElementById("homePage");
+    const teamPage = document.getElementById("teamPage");
+    const teamsGrid = document.getElementById("teamsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const regionFilter = document.getElementById("regionFilter");
+    const sortFilter = document.getElementById("sortFilter");
+
+    function renderTrending() {
+      const trending = document.getElementById("trendingTeams");
+      trending.innerHTML = teams.slice(0, 7).map(team => `
+        <button class="trend-chip" onclick="openTeam('${team.name}')">
+          <span>${team.flag}</span>
+          <span>${team.name.slice(0, 3).toUpperCase()}</span>
+        </button>
+      `).join("");
+    }
+
+    function getFilteredTeams() {
+      let filtered = teams.filter(team => {
+        const matchesSearch = team.name.toLowerCase().includes(currentSearch.toLowerCase());
+        const matchesRegion = currentRegion === "All" || team.region === currentRegion;
+        return matchesSearch && matchesRegion;
+      });
+
+      filtered.sort((a, b) => b[currentSort] - a[currentSort]);
+      return filtered;
+    }
+
+    function renderTeams() {
+      const filtered = getFilteredTeams();
+
+      teamsGrid.innerHTML = filtered.map((team, index) => `
+        <article class="team-card" onclick="openTeam('${team.name}')">
+          <div class="team-rank">${index + 1}</div>
+
+          <div class="team-top">
+            <div class="flag">${team.flag}</div>
+            <div>
+              <div class="team-name">${team.name}</div>
+              <div class="group">${team.group}</div>
+            </div>
+          </div>
+
+          <div class="score-row">
+            <div>
+              <div class="score-label">Pulse Score</div>
+              <div class="score">${team.pulse}</div>
+            </div>
+            <div class="trend">${team.trend}</div>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <span>ATK</span>
+              <strong>${team.attack}</strong>
+            </div>
+            <div class="stat">
+              <span>DEF</span>
+              <strong>${team.defense}</strong>
+            </div>
+            <div class="stat">
+              <span>DEP</span>
+              <strong>${team.depth}</strong>
+            </div>
+            <div class="stat">
+              <span>KO</span>
+              <strong>${team.readiness}</strong>
+            </div>
+          </div>
+
+          <button class="view-btn">View Team Page</button>
+        </article>
+      `).join("");
+    }
+
+    function renderLeaderboard() {
+      const leaderboard = document.getElementById("leaderboard");
+      const top = [...teams].sort((a, b) => b.pulse - a.pulse).slice(0, 5);
+
+      leaderboard.innerHTML = top.map((team, index) => `
+        <div class="leader-row" onclick="openTeam('${team.name}')" style="cursor:pointer;">
+          <strong>${index + 1}</strong>
+          <div>
+            <strong>${team.flag} ${team.name}</strong><br />
+            <small>${team.group}</small>
+          </div>
+          <strong>${team.pulse}</strong>
+        </div>
+      `).join("");
+    }
+
+    function openTeam(teamName) {
+      const team = teams.find(t => t.name === teamName);
+      if (!team) return;
+
+      homePage.style.display = "none";
+      teamPage.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      teamPage.innerHTML = `
+        <button class="back-btn" onclick="backHome()">← Back to all teams</button>
+
+        <section class="team-hero" data-flag="${team.flag}">
+          <div class="eyebrow">${team.group} · ${team.region}</div>
+          <h1>${team.name} Pulse</h1>
+          <p>
+            ${team.identity} Track ${team.name}'s live contender profile through player heat,
+            tactical balance, matchup edges, form trend, and knockout readiness.
+          </p>
+
+          <div class="hero-cards">
+            <div class="hero-card">
+              <span>Pulse Score</span>
+              <strong>${team.pulse}/100</strong>
+            </div>
+            <div class="hero-card">
+              <span>Player Heat Leader</span>
+              <strong style="font-size:22px; letter-spacing:-0.04em;">${team.star}</strong>
+            </div>
+            <div class="hero-card">
+              <span>Attack Heat</span>
+              <strong>${team.attack}</strong>
+            </div>
+            <div class="hero-card">
+              <span>Squad Depth</span>
+              <strong>${team.depth}</strong>
+            </div>
+            <div class="hero-card">
+              <span>Knockout Readiness</span>
+              <strong>${team.readiness}</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <div class="panel">
+            <h3>Contender Index</h3>
+            <div class="ring">
+              <strong>${team.pulse}</strong>
+            </div>
+
+            <div class="bars">
+              ${bar("Attack Heat", team.attack)}
+              ${bar("Defensive Solidity", team.defense)}
+              ${bar("Squad Depth", team.depth)}
+              ${bar("Transition Threat", team.transition)}
+              ${bar("Knockout Readiness", readinessNumber(team.readiness))}
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>${team.name} Hot Board</h3>
+            <div class="player-grid">
+              ${team.players.map(player => `
+                <div class="player-card">
+                  <div class="heat">${player[2]}</div>
+                  <div class="player-face">⚽</div>
+                  <strong>${player[0]}</strong>
+                  <span>${player[1]}</span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Match Monitor</h3>
+            ${team.matches.map(match => `
+              <div class="match">
+                <div>
+                  <strong>${team.flag} ${team.name} vs ${match[0]}</strong><br />
+                  <span style="color:#94a3b8; font-size:13px;">${match[1]}</span>
+                </div>
+                <div style="text-align:right;">
+                  <span style="color:#22d3ee; font-weight:900;">${match[2]}</span>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <div class="panel">
+            <h3>Tactical Identity</h3>
+            <p style="color:#cbd5e1; line-height:1.65;">
+              ${team.identity} The model weighs team style, player roles, shot quality,
+              chance creation, defensive structure, and recent form.
+            </p>
+          </div>
+
+          <div class="panel">
+            <h3>Matchup Edge</h3>
+            ${bar("Attack vs Defense", team.attack)}
+            ${bar("Midfield Control", Math.round((team.depth + team.defense) / 2))}
+            ${bar("Transition Threat", team.transition)}
+            ${bar("Set-Piece Value", Math.round((team.attack + team.defense) / 2))}
+          </div>
+
+          <div class="panel">
+            <h3>Risk Flags</h3>
+            <div class="risk">
+              <div>
+                <strong>Compact Opponents</strong><br />
+                <span style="color:#94a3b8; font-size:13px;">Low blocks can slow chance creation.</span>
+              </div>
+              <span class="badge medium">Medium</span>
+            </div>
+            <div class="risk">
+              <div>
+                <strong>Tournament Fatigue</strong><br />
+                <span style="color:#94a3b8; font-size:13px;">High-minute stars carry workload risk.</span>
+              </div>
+              <span class="badge low">Low</span>
+            </div>
+            <div class="risk">
+              <div>
+                <strong>Finishing Variance</strong><br />
+                <span style="color:#94a3b8; font-size:13px;">Chance quality matters more than streaks.</span>
+              </div>
+              <span class="badge medium">Medium</span>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function bar(label, value) {
+      return `
+        <div class="bar-row">
+          <span>${label}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="--w:${value}%"></div>
+          </div>
+          <strong>${value}</strong>
+        </div>
+      `;
+    }
+
+    function readinessNumber(grade) {
+      const values = {
+        "A": 94,
+        "A-": 90,
+        "B+": 86,
+        "B": 82
+      };
+
+      return values[grade] || 85;
+    }
+
+    function backHome() {
+      teamPage.style.display = "none";
+      homePage.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function scrollToTeams() {
+      document.querySelector(".section").scrollIntoView({ behavior: "smooth" });
+    }
+
+    searchInput.addEventListener("input", event => {
+      currentSearch = event.target.value;
+      renderTeams();
+    });
+
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const filtered = getFilteredTeams();
+      if (filtered.length) openTeam(filtered[0].name);
+    });
+
+    regionFilter.addEventListener("change", event => {
+      currentRegion = event.target.value;
+      renderTeams();
+    });
+
+    sortFilter.addEventListener("change", event => {
+      currentSort = event.target.value;
+      renderTeams();
+    });
+
+    renderTrending();
+    renderTeams();
+    renderLeaderboard();
+  </script>
+</body>
+</html>
