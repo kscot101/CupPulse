@@ -18,6 +18,7 @@
       --yellow: #facc15;
       --purple: #a855f7;
       --red: #ef4444;
+      --silver: #e5e7eb;
     }
 
     * {
@@ -54,7 +55,7 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border);
-      background: rgba(2, 6, 23, 0.9);
+      background: rgba(2, 6, 23, 0.92);
       backdrop-filter: blur(14px);
     }
 
@@ -79,7 +80,7 @@
 
     .nav-links {
       display: flex;
-      gap: 24px;
+      gap: 22px;
       color: var(--muted);
       font-size: 14px;
       font-weight: 700;
@@ -193,7 +194,7 @@
     }
 
     .hero p {
-      max-width: 610px;
+      max-width: 650px;
       margin: 24px 0;
       color: #cbd5e1;
       font-size: 18px;
@@ -648,9 +649,10 @@
 
     .player-list-row,
     .match-list-row,
-    .group-list-row {
+    .group-list-row,
+    .warrior-row {
       display: grid;
-      grid-template-columns: 56px 1fr auto;
+      grid-template-columns: 64px 1fr auto;
       gap: 14px;
       align-items: center;
       padding: 14px 0;
@@ -659,28 +661,156 @@
 
     .player-list-row:last-child,
     .match-list-row:last-child,
-    .group-list-row:last-child {
+    .group-list-row:last-child,
+    .warrior-row:last-child {
       border-bottom: 0;
     }
 
+    .avatar,
     .small-player-avatar {
-      width: 48px;
-      height: 48px;
+      --team-a: #2563eb;
+      --team-b: #ffffff;
+      --team-c: #22d3ee;
+      position: relative;
       display: grid;
       place-items: center;
-      overflow: hidden;
-      border-radius: 15px;
       background:
-        radial-gradient(circle at top left, rgba(34, 211, 238, 0.45), transparent 35%),
-        linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(168, 85, 247, 0.72));
-      color: white;
-      font-weight: 900;
+        linear-gradient(135deg, #f8fafc 0%, #94a3b8 16%, #f8fafc 32%, #334155 54%, #f8fafc 76%, #64748b 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.55),
+        0 12px 26px rgba(0, 0, 0, 0.38),
+        0 0 22px color-mix(in srgb, var(--team-a), transparent 45%);
+      clip-path: polygon(50% 0%, 91% 14%, 91% 63%, 50% 100%, 9% 63%, 9% 14%);
+      overflow: hidden;
+      isolation: isolate;
     }
 
-    .small-player-avatar img {
+    .avatar {
+      width: 86px;
+      height: 94px;
+      padding: 5px;
+      margin-bottom: 12px;
+    }
+
+    .small-player-avatar {
+      width: 58px;
+      height: 64px;
+      padding: 4px;
+    }
+
+    .avatar::before,
+    .small-player-avatar::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      clip-path: polygon(50% 0%, 88% 14%, 88% 61%, 50% 94%, 12% 61%, 12% 14%);
+      border: 1px solid rgba(255, 255, 255, 0.48);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .avatar::after,
+    .small-player-avatar::after {
+      content: "";
+      position: absolute;
+      left: -48%;
+      top: -70%;
+      width: 58%;
+      height: 250%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+      transform: rotate(23deg);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .player-photo {
+      position: relative;
+      z-index: 2;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
+      clip-path: polygon(50% 0%, 88% 14%, 88% 61%, 50% 94%, 12% 61%, 12% 14%);
+      filter: saturate(1.08) contrast(1.06);
+    }
+
+    .initials-fallback,
+    .small-initials-fallback {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: none;
+      place-items: center;
+      clip-path: polygon(50% 0%, 88% 14%, 88% 61%, 50% 94%, 12% 61%, 12% 14%);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.12), transparent 26%),
+        linear-gradient(155deg,
+          transparent 0%,
+          transparent 50%,
+          color-mix(in srgb, var(--team-a), #000 8%) 50%,
+          color-mix(in srgb, var(--team-a), #000 8%) 58%,
+          color-mix(in srgb, var(--team-b), #000 6%) 58%,
+          color-mix(in srgb, var(--team-b), #000 6%) 65%,
+          color-mix(in srgb, var(--team-c), #000 4%) 65%,
+          color-mix(in srgb, var(--team-c), #000 4%) 75%,
+          transparent 75%),
+        radial-gradient(circle at bottom right, color-mix(in srgb, var(--team-a), transparent 64%), transparent 44%),
+        #050914;
+      color: white;
+      text-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.65),
+        0 0 16px color-mix(in srgb, var(--team-a), transparent 20%);
+    }
+
+    .initials-fallback::before,
+    .small-initials-fallback::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.28;
+      background:
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 8px),
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 18%);
+      pointer-events: none;
+    }
+
+    .initials-fallback span,
+    .small-initials-fallback span {
+      position: relative;
+      z-index: 2;
+      font-weight: 1000;
+      font-style: italic;
+      letter-spacing: -3px;
+      transform: skew(-9deg);
+      color: #f8fafc;
+    }
+
+    .initials-fallback span {
+      font-size: 32px;
+    }
+
+    .small-initials-fallback span {
+      font-size: 20px;
+      letter-spacing: -2px;
+    }
+
+    .initials-fallback i,
+    .small-initials-fallback i {
+      position: absolute;
+      bottom: 9px;
+      font-style: normal;
+      color: var(--team-b);
+      font-size: 13px;
+      text-shadow: 0 0 10px var(--team-a);
+      z-index: 3;
+    }
+
+    .small-initials-fallback i {
+      bottom: 6px;
+      font-size: 9px;
     }
 
     .stat-pill {
@@ -688,6 +818,17 @@
       border: 1px solid rgba(96, 165, 250, 0.45);
       border-radius: 999px;
       color: #bfdbfe;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .warrior-pill {
+      padding: 8px 11px;
+      border: 1px solid rgba(34, 211, 238, 0.52);
+      border-radius: 999px;
+      color: #a5f3fc;
+      background: rgba(34, 211, 238, 0.08);
       font-size: 12px;
       font-weight: 900;
       white-space: nowrap;
@@ -710,7 +851,7 @@
     }
 
     .live-card::before {
-      content: "LIVE PREVIEW";
+      content: "MATCH PREVIEW";
       position: absolute;
       right: 18px;
       top: 18px;
@@ -818,6 +959,15 @@
       line-height: 1.55;
     }
 
+    .warrior-list-title {
+      margin: 18px 0 6px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
     #teamPage {
       display: none;
       padding: 30px 0 56px;
@@ -856,7 +1006,7 @@
     }
 
     .team-hero p {
-      max-width: 680px;
+      max-width: 720px;
       color: #cbd5e1;
       font-size: 17px;
       line-height: 1.6;
@@ -956,35 +1106,13 @@
       background: rgba(15, 23, 42, 0.72);
     }
 
-    .avatar {
-      width: 72px;
-      height: 72px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 12px;
-      border-radius: 22px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top left, rgba(34, 211, 238, 0.45), transparent 35%),
-        linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(168, 85, 247, 0.72));
-      font-size: 18px;
-      font-weight: 900;
-      color: white;
-    }
-
-    .player-photo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .heat {
+    .cwr {
       float: right;
       padding: 5px 8px;
-      border: 1px solid rgba(96, 165, 250, 0.5);
+      border: 1px solid rgba(34, 211, 238, 0.5);
       border-radius: 9px;
-      color: #93c5fd;
+      color: #a5f3fc;
+      background: rgba(34, 211, 238, 0.08);
       font-weight: 900;
     }
 
@@ -1147,13 +1275,13 @@
 
         <h1>
           Explore Every <span class="gradient">Team.</span><br />
-          Track Every <span class="gradient">Pulse.</span>
+          Track Every <span class="gradient">Warrior.</span>
         </h1>
 
         <p>
-          CupPulse is a dark dashboard for every World Cup team page.
-          Search a country, open its dashboard, and see player heat, expected goals,
-          squad depth, tactical identity, matchup edges, and knockout-readiness signals.
+          CupPulse tracks every World Cup team with team pulse, expected goals,
+          matchup previews, and the Cup Warrior Rating — a player impact score based
+          on current form, offensive role, opposing defense, projected xG, and game impact.
         </p>
 
         <div class="search">
@@ -1183,8 +1311,8 @@
             <span>Groups</span>
           </div>
           <div class="mini-stat">
-            <strong>3</strong>
-            <span>Hosts</span>
+            <strong>CWR</strong>
+            <span>Impact Rating</span>
           </div>
         </div>
       </aside>
@@ -1225,9 +1353,9 @@
             </div>
 
             <div class="feature">
-              <div>🔥</div>
-              <strong>Player Heat</strong>
-              <span>See which stars and role players are trending up before matchday.</span>
+              <div>⚔️</div>
+              <strong>Cup Warrior Rating</strong>
+              <span>Player impact score built from form, usage, opponent defense, and projected xG.</span>
             </div>
 
             <div class="feature">
@@ -1237,9 +1365,9 @@
             </div>
 
             <div class="feature">
-              <div>⚔️</div>
-              <strong>Matchup Edges</strong>
-              <span>Break down where each team can create tactical advantages.</span>
+              <div>🛡️</div>
+              <strong>Team Color Avatars</strong>
+              <span>Player initials become chrome shield badges with flag-colored performance stripes.</span>
             </div>
 
             <div class="feature">
@@ -1259,16 +1387,18 @@
           <div class="panel cta">
             <h3>Choose any team</h3>
             <p style="color:#cbd5e1; line-height:1.55;">
-              Click a team card to open a full dashboard page with the same dark analytics style.
+              Click a team card to open a full dashboard with Cup Warrior Ratings,
+              matchup edges, player impact paths, and expected goals.
             </p>
             <button id="chooseTeamButton">Browse Teams</button>
           </div>
 
           <div class="panel">
-            <h3>What is Pulse Score?</h3>
+            <h3>What is CWR?</h3>
             <p style="color:#cbd5e1; line-height:1.55;">
-              Pulse Score combines attack heat, defensive solidity, squad depth,
-              transition threat, player form, and knockout readiness into one rating.
+              Cup Warrior Rating measures how likely a player is to impact the upcoming
+              match based on recent form, offensive role, usage, opponent weakness,
+              projected team xG, and game-impact modifiers.
             </p>
           </div>
         </aside>
@@ -1277,12 +1407,12 @@
 
     <section id="playersSection" class="extra-section route-page">
       <div class="section-head">
-        <h2>Player Heat</h2>
+        <h2>Cup Warrior Rating</h2>
       </div>
 
       <div class="extra-grid">
         <div class="wide-card">
-          <h3>Top Hot Players</h3>
+          <h3>Top Cup Warriors</h3>
           <div id="topPlayersList"></div>
         </div>
 
@@ -1346,6 +1476,7 @@
         name: "France",
         flag: "🇫🇷",
         flagImage: "https://flagcdn.com/w160/fr.png",
+        colors: ["#0055a4", "#ffffff", "#ef4135"],
         group: "Group I",
         region: "UEFA",
         pulse: 95,
@@ -1358,12 +1489,12 @@
         star: "Kylian Mbappé",
         identity: "Elite transition danger, world-class squad depth, and knockout reliability.",
         players: [
-          { name: "Kylian Mbappé", role: "Forward", heat: 97 },
-          { name: "Ousmane Dembélé", role: "Winger", heat: 91 },
-          { name: "William Saliba", role: "Defender", heat: 89 },
-          { name: "Aurélien Tchouaméni", role: "Midfield", heat: 88 },
-          { name: "Antoine Griezmann", role: "Creator", heat: 87 },
-          { name: "Eduardo Camavinga", role: "Utility", heat: 86 }
+          { name: "Kylian Mbappé", role: "Forward", base: 97, usage: 98, matchupFit: 97, penaltyRole: 90, setPieceRole: 50, style: "Transition runs, shot volume, box touches" },
+          { name: "Ousmane Dembélé", role: "Winger", base: 91, usage: 88, matchupFit: 90, penaltyRole: 20, setPieceRole: 55, style: "One-v-one creation and final-third disruption" },
+          { name: "William Saliba", role: "Defender", base: 89, usage: 74, matchupFit: 82, penaltyRole: 0, setPieceRole: 35, style: "Recovery defending and duel control" },
+          { name: "Aurélien Tchouaméni", role: "Midfield", base: 88, usage: 84, matchupFit: 84, penaltyRole: 0, setPieceRole: 30, style: "Midfield control and ball-winning" },
+          { name: "Antoine Griezmann", role: "Creator", base: 87, usage: 86, matchupFit: 87, penaltyRole: 40, setPieceRole: 88, style: "Set pieces, xA, final-third passing" },
+          { name: "Eduardo Camavinga", role: "Utility", base: 86, usage: 78, matchupFit: 82, penaltyRole: 0, setPieceRole: 20, style: "Press resistance and flexible coverage" }
         ],
         matches: [
           ["Senegal", "Physical test", "Transition speed"],
@@ -1375,6 +1506,7 @@
         name: "Brazil",
         flag: "🇧🇷",
         flagImage: "https://flagcdn.com/w160/br.png",
+        colors: ["#009b3a", "#ffdf00", "#002776"],
         group: "Group C",
         region: "CONMEBOL",
         pulse: 92,
@@ -1387,12 +1519,12 @@
         star: "Vinícius Júnior",
         identity: "Explosive wide play, creative flair, and elite attacking volume.",
         players: [
-          { name: "Vinícius Júnior", role: "Winger", heat: 96 },
-          { name: "Rodrygo", role: "Forward", heat: 90 },
-          { name: "Bruno Guimarães", role: "Midfield", heat: 88 },
-          { name: "Éder Militão", role: "Defender", heat: 87 },
-          { name: "Alisson", role: "Goalkeeper", heat: 86 },
-          { name: "Raphinha", role: "Winger", heat: 85 }
+          { name: "Vinícius Júnior", role: "Winger", base: 96, usage: 95, matchupFit: 96, penaltyRole: 30, setPieceRole: 35, style: "Wide isolation, carries into box, transition threat" },
+          { name: "Rodrygo", role: "Forward", base: 90, usage: 88, matchupFit: 88, penaltyRole: 20, setPieceRole: 45, style: "Flexible forward movement and shot quality" },
+          { name: "Bruno Guimarães", role: "Midfield", base: 88, usage: 84, matchupFit: 84, penaltyRole: 0, setPieceRole: 25, style: "Progressive passing and midfield control" },
+          { name: "Éder Militão", role: "Defender", base: 87, usage: 76, matchupFit: 81, penaltyRole: 0, setPieceRole: 42, style: "Aerial defense and recovery speed" },
+          { name: "Alisson", role: "Goalkeeper", base: 86, usage: 70, matchupFit: 78, penaltyRole: 0, setPieceRole: 0, style: "Shot stopping and distribution" },
+          { name: "Raphinha", role: "Winger", base: 85, usage: 82, matchupFit: 86, penaltyRole: 15, setPieceRole: 60, style: "Pressing, crossing, and chance creation" }
         ],
         matches: [
           ["Morocco", "Pressure test", "Wide overloads"],
@@ -1404,6 +1536,7 @@
         name: "Argentina",
         flag: "🇦🇷",
         flagImage: "https://flagcdn.com/w160/ar.png",
+        colors: ["#74acdf", "#ffffff", "#f6b40e"],
         group: "Group J",
         region: "CONMEBOL",
         pulse: 91,
@@ -1416,12 +1549,12 @@
         star: "Lionel Messi",
         identity: "Control, experience, central combinations, and set-piece danger.",
         players: [
-          { name: "Lionel Messi", role: "Creator", heat: 94 },
-          { name: "Lautaro Martínez", role: "Forward", heat: 90 },
-          { name: "Julián Álvarez", role: "Forward", heat: 89 },
-          { name: "Alexis Mac Allister", role: "Midfield", heat: 88 },
-          { name: "Cristian Romero", role: "Defender", heat: 87 },
-          { name: "Emiliano Martínez", role: "Goalkeeper", heat: 86 }
+          { name: "Lionel Messi", role: "Creator", base: 94, usage: 96, matchupFit: 95, penaltyRole: 95, setPieceRole: 98, style: "Central creation, set pieces, shot assists" },
+          { name: "Lautaro Martínez", role: "Forward", base: 90, usage: 86, matchupFit: 88, penaltyRole: 35, setPieceRole: 20, style: "Box movement and finishing chances" },
+          { name: "Julián Álvarez", role: "Forward", base: 89, usage: 85, matchupFit: 87, penaltyRole: 20, setPieceRole: 35, style: "Pressing forward and flexible runs" },
+          { name: "Alexis Mac Allister", role: "Midfield", base: 88, usage: 84, matchupFit: 84, penaltyRole: 10, setPieceRole: 45, style: "Tempo control and progressive passing" },
+          { name: "Cristian Romero", role: "Defender", base: 87, usage: 74, matchupFit: 80, penaltyRole: 0, setPieceRole: 35, style: "Duel intensity and defensive disruption" },
+          { name: "Emiliano Martínez", role: "Goalkeeper", base: 86, usage: 72, matchupFit: 78, penaltyRole: 0, setPieceRole: 0, style: "Shot stopping and penalty value" }
         ],
         matches: [
           ["Algeria", "Compact opponent", "Tempo control"],
@@ -1433,6 +1566,7 @@
         name: "England",
         flag: "🏴",
         flagImage: "https://flagcdn.com/w160/gb-eng.png",
+        colors: ["#ffffff", "#cf142b", "#00247d"],
         group: "Group K",
         region: "UEFA",
         pulse: 89,
@@ -1445,12 +1579,12 @@
         star: "Jude Bellingham",
         identity: "Midfield power, attacking depth, and a strong defensive floor.",
         players: [
-          { name: "Jude Bellingham", role: "Midfield", heat: 94 },
-          { name: "Harry Kane", role: "Forward", heat: 91 },
-          { name: "Bukayo Saka", role: "Winger", heat: 90 },
-          { name: "Declan Rice", role: "Midfield", heat: 88 },
-          { name: "Phil Foden", role: "Creator", heat: 87 },
-          { name: "John Stones", role: "Defender", heat: 85 }
+          { name: "Jude Bellingham", role: "Midfield", base: 94, usage: 94, matchupFit: 92, penaltyRole: 25, setPieceRole: 45, style: "Box crashing, midfield control, late runs" },
+          { name: "Harry Kane", role: "Forward", base: 91, usage: 92, matchupFit: 90, penaltyRole: 95, setPieceRole: 25, style: "Finishing, penalties, link play" },
+          { name: "Bukayo Saka", role: "Winger", base: 90, usage: 88, matchupFit: 91, penaltyRole: 35, setPieceRole: 65, style: "Right-side creation and shot quality" },
+          { name: "Declan Rice", role: "Midfield", base: 88, usage: 84, matchupFit: 84, penaltyRole: 0, setPieceRole: 30, style: "Ball-winning and progression" },
+          { name: "Phil Foden", role: "Creator", base: 87, usage: 84, matchupFit: 86, penaltyRole: 15, setPieceRole: 60, style: "Central pockets and final-third creation" },
+          { name: "John Stones", role: "Defender", base: 85, usage: 75, matchupFit: 78, penaltyRole: 0, setPieceRole: 25, style: "Build-up play and defensive cover" }
         ],
         matches: [
           ["Croatia", "Tournament test", "Midfield control"],
@@ -1462,6 +1596,7 @@
         name: "Spain",
         flag: "🇪🇸",
         flagImage: "https://flagcdn.com/w160/es.png",
+        colors: ["#aa151b", "#f1bf00", "#aa151b"],
         group: "Group L",
         region: "UEFA",
         pulse: 88,
@@ -1474,12 +1609,12 @@
         star: "Lamine Yamal",
         identity: "Possession control, technical quality, and final-third patience.",
         players: [
-          { name: "Lamine Yamal", role: "Winger", heat: 91 },
-          { name: "Rodri", role: "Midfield", heat: 92 },
-          { name: "Pedri", role: "Creator", heat: 89 },
-          { name: "Nico Williams", role: "Winger", heat: 88 },
-          { name: "Dani Olmo", role: "Creator", heat: 86 },
-          { name: "Aymeric Laporte", role: "Defender", heat: 84 }
+          { name: "Lamine Yamal", role: "Winger", base: 91, usage: 88, matchupFit: 92, penaltyRole: 10, setPieceRole: 50, style: "Wide creation and one-v-one threat" },
+          { name: "Rodri", role: "Midfield", base: 92, usage: 90, matchupFit: 88, penaltyRole: 10, setPieceRole: 30, style: "Control, ball security, tempo" },
+          { name: "Pedri", role: "Creator", base: 89, usage: 86, matchupFit: 88, penaltyRole: 5, setPieceRole: 45, style: "Between-line creation and passing rhythm" },
+          { name: "Nico Williams", role: "Winger", base: 88, usage: 84, matchupFit: 90, penaltyRole: 5, setPieceRole: 30, style: "Direct wing pressure and box entries" },
+          { name: "Dani Olmo", role: "Creator", base: 86, usage: 82, matchupFit: 84, penaltyRole: 15, setPieceRole: 55, style: "Central creation and shooting lanes" },
+          { name: "Aymeric Laporte", role: "Defender", base: 84, usage: 74, matchupFit: 78, penaltyRole: 0, setPieceRole: 30, style: "Build-up passing and aerial defense" }
         ],
         matches: [
           ["Uruguay", "High-level test", "Possession control"],
@@ -1491,6 +1626,7 @@
         name: "Portugal",
         flag: "🇵🇹",
         flagImage: "https://flagcdn.com/w160/pt.png",
+        colors: ["#006600", "#ff0000", "#ffcc00"],
         group: "Group H",
         region: "UEFA",
         pulse: 87,
@@ -1503,12 +1639,12 @@
         star: "Bruno Fernandes",
         identity: "Creative passing, technical attackers, and high individual upside.",
         players: [
-          { name: "Bruno Fernandes", role: "Creator", heat: 91 },
-          { name: "Bernardo Silva", role: "Creator", heat: 89 },
-          { name: "Rafael Leão", role: "Winger", heat: 88 },
-          { name: "Cristiano Ronaldo", role: "Forward", heat: 87 },
-          { name: "Rúben Dias", role: "Defender", heat: 86 },
-          { name: "Diogo Costa", role: "Goalkeeper", heat: 85 }
+          { name: "Bruno Fernandes", role: "Creator", base: 91, usage: 90, matchupFit: 89, penaltyRole: 75, setPieceRole: 92, style: "xA, set pieces, chance creation" },
+          { name: "Bernardo Silva", role: "Creator", base: 89, usage: 86, matchupFit: 88, penaltyRole: 5, setPieceRole: 45, style: "Press resistance and central control" },
+          { name: "Rafael Leão", role: "Winger", base: 88, usage: 84, matchupFit: 89, penaltyRole: 10, setPieceRole: 20, style: "Explosive carries and transition threat" },
+          { name: "Cristiano Ronaldo", role: "Forward", base: 87, usage: 86, matchupFit: 84, penaltyRole: 95, setPieceRole: 30, style: "Box finishing, aerial threat, penalties" },
+          { name: "Rúben Dias", role: "Defender", base: 86, usage: 76, matchupFit: 80, penaltyRole: 0, setPieceRole: 35, style: "Defensive organization and aerial duels" },
+          { name: "Diogo Costa", role: "Goalkeeper", base: 85, usage: 70, matchupFit: 76, penaltyRole: 0, setPieceRole: 0, style: "Shot stopping and distribution" }
         ],
         matches: [
           ["Colombia", "Chaos game", "Creative passing"],
@@ -1520,6 +1656,7 @@
         name: "Germany",
         flag: "🇩🇪",
         flagImage: "https://flagcdn.com/w160/de.png",
+        colors: ["#000000", "#dd0000", "#ffce00"],
         group: "Group E",
         region: "UEFA",
         pulse: 86,
@@ -1532,12 +1669,12 @@
         star: "Jamal Musiala",
         identity: "Technical midfield play, chance creation, and structured possession.",
         players: [
-          { name: "Jamal Musiala", role: "Creator", heat: 91 },
-          { name: "Florian Wirtz", role: "Creator", heat: 90 },
-          { name: "Kai Havertz", role: "Forward", heat: 86 },
-          { name: "Joshua Kimmich", role: "Midfield", heat: 85 },
-          { name: "Antonio Rüdiger", role: "Defender", heat: 84 },
-          { name: "Marc-André ter Stegen", role: "Goalkeeper", heat: 84 }
+          { name: "Jamal Musiala", role: "Creator", base: 91, usage: 88, matchupFit: 90, penaltyRole: 10, setPieceRole: 35, style: "Dribbling, central creation, chance generation" },
+          { name: "Florian Wirtz", role: "Creator", base: 90, usage: 88, matchupFit: 89, penaltyRole: 20, setPieceRole: 65, style: "xA, final ball, central overloads" },
+          { name: "Kai Havertz", role: "Forward", base: 86, usage: 84, matchupFit: 84, penaltyRole: 45, setPieceRole: 25, style: "Box movement and aerial value" },
+          { name: "Joshua Kimmich", role: "Midfield", base: 85, usage: 84, matchupFit: 82, penaltyRole: 5, setPieceRole: 75, style: "Progression, set pieces, tempo" },
+          { name: "Antonio Rüdiger", role: "Defender", base: 84, usage: 74, matchupFit: 78, penaltyRole: 0, setPieceRole: 35, style: "Duel defense and physicality" },
+          { name: "Marc-André ter Stegen", role: "Goalkeeper", base: 84, usage: 70, matchupFit: 76, penaltyRole: 0, setPieceRole: 0, style: "Shot stopping and build-up" }
         ],
         matches: [
           ["Ecuador", "Pressing test", "Central creation"],
@@ -1549,6 +1686,7 @@
         name: "Netherlands",
         flag: "🇳🇱",
         flagImage: "https://flagcdn.com/w160/nl.png",
+        colors: ["#ae1c28", "#ffffff", "#21468b"],
         group: "Group G",
         region: "UEFA",
         pulse: 85,
@@ -1561,12 +1699,12 @@
         star: "Virgil van Dijk",
         identity: "Defensive structure, aerial power, and direct attacking outlets.",
         players: [
-          { name: "Virgil van Dijk", role: "Defender", heat: 90 },
-          { name: "Frenkie de Jong", role: "Midfield", heat: 88 },
-          { name: "Cody Gakpo", role: "Forward", heat: 87 },
-          { name: "Xavi Simons", role: "Creator", heat: 86 },
-          { name: "Denzel Dumfries", role: "Wingback", heat: 84 },
-          { name: "Matthijs de Ligt", role: "Defender", heat: 83 }
+          { name: "Virgil van Dijk", role: "Defender", base: 90, usage: 78, matchupFit: 84, penaltyRole: 0, setPieceRole: 50, style: "Aerial control, leadership, defensive impact" },
+          { name: "Frenkie de Jong", role: "Midfield", base: 88, usage: 86, matchupFit: 86, penaltyRole: 0, setPieceRole: 35, style: "Progression and press resistance" },
+          { name: "Cody Gakpo", role: "Forward", base: 87, usage: 84, matchupFit: 86, penaltyRole: 35, setPieceRole: 40, style: "Direct attack and shot creation" },
+          { name: "Xavi Simons", role: "Creator", base: 86, usage: 82, matchupFit: 84, penaltyRole: 10, setPieceRole: 60, style: "Final-third creativity and movement" },
+          { name: "Denzel Dumfries", role: "Wingback", base: 84, usage: 78, matchupFit: 83, penaltyRole: 0, setPieceRole: 25, style: "Wide runs and aerial back-post threat" },
+          { name: "Matthijs de Ligt", role: "Defender", base: 83, usage: 74, matchupFit: 78, penaltyRole: 0, setPieceRole: 35, style: "Box defense and aerial strength" }
         ],
         matches: [
           ["Belgium", "Derby test", "Defensive structure"],
@@ -1577,10 +1715,10 @@
     ];
 
     const extraTeams = {
-      Senegal: { name: "Senegal", flag: "🇸🇳", flagImage: "https://flagcdn.com/w160/sn.png", pulse: 81, attack: 79, defense: 82, depth: 78, transition: 84 },
-      Morocco: { name: "Morocco", flag: "🇲🇦", flagImage: "https://flagcdn.com/w160/ma.png", pulse: 84, attack: 82, defense: 86, depth: 80, transition: 81 },
-      Austria: { name: "Austria", flag: "🇦🇹", flagImage: "https://flagcdn.com/w160/at.png", pulse: 80, attack: 78, defense: 81, depth: 79, transition: 82 },
-      Croatia: { name: "Croatia", flag: "🇭🇷", flagImage: "https://flagcdn.com/w160/hr.png", pulse: 82, attack: 80, defense: 83, depth: 81, transition: 76 }
+      Senegal: { name: "Senegal", flag: "🇸🇳", flagImage: "https://flagcdn.com/w160/sn.png", colors: ["#00853f", "#fdef42", "#e31b23"], pulse: 81, attack: 79, defense: 82, depth: 78, transition: 84 },
+      Morocco: { name: "Morocco", flag: "🇲🇦", flagImage: "https://flagcdn.com/w160/ma.png", colors: ["#c1272d", "#006233", "#ffffff"], pulse: 84, attack: 82, defense: 86, depth: 80, transition: 81 },
+      Austria: { name: "Austria", flag: "🇦🇹", flagImage: "https://flagcdn.com/w160/at.png", colors: ["#ed2939", "#ffffff", "#ed2939"], pulse: 80, attack: 78, defense: 81, depth: 79, transition: 82 },
+      Croatia: { name: "Croatia", flag: "🇭🇷", flagImage: "https://flagcdn.com/w160/hr.png", colors: ["#ff0000", "#ffffff", "#171796"], pulse: 82, attack: 80, defense: 83, depth: 81, transition: 76 }
     };
 
     const liveGames = [
@@ -1590,6 +1728,7 @@
         homeXG: 1.92,
         awayXG: 1.08,
         tempo: 78,
+        possessionEdge: 58,
         pressEdge: "France +9",
         setPieceEdge: "Even",
         upsetRisk: "Medium",
@@ -1602,6 +1741,7 @@
         homeXG: 2.05,
         awayXG: 1.21,
         tempo: 82,
+        possessionEdge: 56,
         pressEdge: "Brazil +6",
         setPieceEdge: "Morocco +3",
         upsetRisk: "Medium",
@@ -1614,6 +1754,7 @@
         homeXG: 1.68,
         awayXG: 1.02,
         tempo: 69,
+        possessionEdge: 60,
         pressEdge: "Austria +4",
         setPieceEdge: "Argentina +5",
         upsetRisk: "Low",
@@ -1626,6 +1767,7 @@
         homeXG: 1.57,
         awayXG: 1.18,
         tempo: 72,
+        possessionEdge: 54,
         pressEdge: "England +2",
         setPieceEdge: "England +7",
         upsetRisk: "Medium",
@@ -1648,6 +1790,10 @@
     const regionFilter = document.getElementById("regionFilter");
     const sortFilter = document.getElementById("sortFilter");
     const chooseTeamButton = document.getElementById("chooseTeamButton");
+
+    function clamp(value, min = 1, max = 100) {
+      return Math.max(min, Math.min(max, value));
+    }
 
     function slugify(text) {
       return text
@@ -1673,14 +1819,227 @@
         .toUpperCase();
     }
 
+    function teamColorVars(team) {
+      const colors = team.colors || ["#2563eb", "#ffffff", "#22d3ee"];
+
+      return "--team-a:" + colors[0] + "; --team-b:" + colors[1] + "; --team-c:" + colors[2] + ";";
+    }
+
     function fallbackFlag(img, emoji) {
       img.style.display = "none";
       img.parentElement.textContent = emoji;
     }
 
-    function fallbackPhoto(img, initials) {
+    function fallbackPhoto(img) {
       img.style.display = "none";
-      img.parentElement.textContent = initials;
+      if (img.nextElementSibling) {
+        img.nextElementSibling.style.display = "grid";
+      }
+    }
+
+    function playerAvatar(player, team, size) {
+      const initials = getInitials(player.name);
+      const photo = playerImagePath(player.name);
+      const wrapperClass = size === "small" ? "small-player-avatar" : "avatar";
+      const fallbackClass = size === "small" ? "small-initials-fallback" : "initials-fallback";
+
+      return `
+        <div class="${wrapperClass}" style="${teamColorVars(team)}">
+          <img
+            class="player-photo"
+            src="${photo}"
+            alt="${player.name}"
+            onerror="fallbackPhoto(this)"
+          />
+          <div class="${fallbackClass}">
+            <span>${initials}</span>
+            <i>★</i>
+          </div>
+        </div>
+      `;
+    }
+
+    function getTeamByName(name) {
+      return teams.find(function(team) {
+        return team.name.toLowerCase() === name.toLowerCase();
+      }) || extraTeams[name];
+    }
+
+    function genericOpponent(name) {
+      return {
+        name: name,
+        flag: "🏳️",
+        flagImage: "https://flagcdn.com/w160/un.png",
+        colors: ["#2563eb", "#ffffff", "#22d3ee"],
+        pulse: 78,
+        attack: 78,
+        defense: 78,
+        depth: 76,
+        transition: 76
+      };
+    }
+
+    function getRoleProfile(player) {
+      const role = player.role.toLowerCase();
+      const base = player.base || 82;
+
+      let xgTrend = base - 4;
+      let xaTrend = base - 4;
+      let shotVolume = base - 4;
+      let boxTouches = base - 4;
+      let transitionThreat = base - 5;
+      let bigChanceInvolvement = base - 4;
+      let aerialOrSetPieceThreat = 55;
+
+      if (role.includes("forward")) {
+        xgTrend = base + 3;
+        shotVolume = base + 3;
+        boxTouches = base + 4;
+        bigChanceInvolvement = base + 2;
+        transitionThreat = base;
+        aerialOrSetPieceThreat = 70;
+      }
+
+      if (role.includes("winger")) {
+        xgTrend = base;
+        xaTrend = base + 2;
+        shotVolume = base + 1;
+        boxTouches = base + 2;
+        transitionThreat = base + 4;
+        bigChanceInvolvement = base;
+        aerialOrSetPieceThreat = 55;
+      }
+
+      if (role.includes("creator")) {
+        xgTrend = base - 2;
+        xaTrend = base + 4;
+        shotVolume = base - 1;
+        boxTouches = base;
+        transitionThreat = base - 1;
+        bigChanceInvolvement = base + 2;
+        aerialOrSetPieceThreat = player.setPieceRole || 70;
+      }
+
+      if (role.includes("midfield")) {
+        xgTrend = base - 5;
+        xaTrend = base;
+        shotVolume = base - 3;
+        boxTouches = base - 3;
+        transitionThreat = base - 2;
+        bigChanceInvolvement = base - 1;
+        aerialOrSetPieceThreat = 50;
+      }
+
+      if (role.includes("defender") || role.includes("goalkeeper") || role.includes("wingback")) {
+        xgTrend = base - 12;
+        xaTrend = base - 8;
+        shotVolume = base - 12;
+        boxTouches = base - 10;
+        transitionThreat = base - 8;
+        bigChanceInvolvement = base - 10;
+        aerialOrSetPieceThreat = role.includes("goalkeeper") ? 25 : 75;
+      }
+
+      return {
+        xgTrend: clamp(xgTrend),
+        xaTrend: clamp(xaTrend),
+        shotVolume: clamp(shotVolume),
+        boxTouches: clamp(boxTouches),
+        transitionThreat: clamp(transitionThreat),
+        bigChanceInvolvement: clamp(bigChanceInvolvement),
+        aerialOrSetPieceThreat: clamp(aerialOrSetPieceThreat)
+      };
+    }
+
+    function matchupForTeam(team) {
+      const live = liveGames.find(function(game) {
+        return game.home === team.name || game.away === team.name;
+      });
+
+      if (live) {
+        const isHome = live.home === team.name;
+        const opponent = getTeamByName(isHome ? live.away : live.home) || genericOpponent(isHome ? live.away : live.home);
+
+        return {
+          opponent: opponent,
+          teamProjectedXG: isHome ? live.homeXG : live.awayXG,
+          opponentProjectedXG: isHome ? live.awayXG : live.homeXG,
+          tempo: live.tempo,
+          possessionEdge: live.possessionEdge,
+          label: opponent.name
+        };
+      }
+
+      const opponentName = team.matches[0] ? team.matches[0][0] : "Opponent";
+      const opponent = getTeamByName(opponentName) || genericOpponent(opponentName);
+      const projectedXG = clamp((team.attack - opponent.defense + 85) / 45, 0.75, 2.25);
+
+      return {
+        opponent: opponent,
+        teamProjectedXG: projectedXG,
+        opponentProjectedXG: 1.05,
+        tempo: 72,
+        possessionEdge: 52,
+        label: opponent.name
+      };
+    }
+
+    function calculateCupWarriorRating(player, team, opponent, match) {
+      const roleProfile = getRoleProfile(player);
+
+      const currentOffensiveForm =
+        (player.base || 82) * 0.35 +
+        roleProfile.xgTrend * 0.25 +
+        roleProfile.xaTrend * 0.15 +
+        roleProfile.shotVolume * 0.15 +
+        roleProfile.boxTouches * 0.10;
+
+      const opponentVulnerability = clamp(62 + (100 - opponent.defense) * 1.15);
+      const allowsBoxEntries = clamp(60 + (100 - opponent.defense) * 1.05 + (100 - opponent.depth) * 0.25);
+      const setPieceWeakness = clamp(60 + (100 - opponent.defense) * 0.75 + (100 - opponent.depth) * 0.15);
+
+      const opponentDefensiveMatchup =
+        opponentVulnerability * 0.35 +
+        (player.matchupFit || player.base || 82) * 0.30 +
+        allowsBoxEntries * 0.20 +
+        setPieceWeakness * 0.15;
+
+      const playerRoleUsage =
+        clamp((player.usage || player.base || 82)) * 0.30 +
+        clamp((player.usage || player.base || 82) + 2) * 0.30 +
+        clamp((player.usage || player.base || 82) - 3) * 0.20 +
+        clamp(player.setPieceRole || 0) * 0.10 +
+        clamp(player.penaltyRole || 0) * 0.10;
+
+      const teamAttackEnvironment = clamp(
+        match.teamProjectedXG * 25 +
+        team.attack * 0.30 +
+        match.tempo * 0.20 +
+        match.possessionEdge * 0.20
+      );
+
+      const gameImpactModifiers =
+        roleProfile.transitionThreat * 0.25 +
+        roleProfile.bigChanceInvolvement * 0.25 +
+        clamp((player.base || 82) + 2) * 0.20 +
+        clamp((player.usage || player.base || 82) - 2) * 0.15 +
+        clamp((roleProfile.aerialOrSetPieceThreat + (player.setPieceRole || 0)) / 2) * 0.15;
+
+      const rating =
+        currentOffensiveForm * 0.30 +
+        opponentDefensiveMatchup * 0.25 +
+        playerRoleUsage * 0.20 +
+        teamAttackEnvironment * 0.15 +
+        gameImpactModifiers * 0.10;
+
+      return {
+        rating: Math.round(clamp(rating)),
+        form: Math.round(clamp(currentOffensiveForm)),
+        matchup: Math.round(clamp(opponentDefensiveMatchup)),
+        usage: Math.round(clamp(playerRoleUsage)),
+        environment: Math.round(clamp(teamAttackEnvironment)),
+        xgInvolvement: Math.max(0.08, Math.min(0.95, (match.teamProjectedXG * ((player.usage || player.base || 82) / 100) * ((player.base || 82) / 100)) / 2)).toFixed(2)
+      };
     }
 
     function showRoute(targetId) {
@@ -1726,25 +2085,6 @@
       });
 
       return filtered;
-    }
-
-    function getTeamByName(name) {
-      return teams.find(function(team) {
-        return team.name.toLowerCase() === name.toLowerCase();
-      }) || extraTeams[name];
-    }
-
-    function genericOpponent(name) {
-      return {
-        name: name,
-        flag: "🏳️",
-        flagImage: "https://flagcdn.com/w160/un.png",
-        pulse: 78,
-        attack: 78,
-        defense: 78,
-        depth: 76,
-        transition: 76
-      };
     }
 
     function renderQuickTeams() {
@@ -1862,13 +2202,18 @@
       let allPlayers = [];
 
       teams.forEach(function(team) {
+        const match = matchupForTeam(team);
         team.players.forEach(function(player) {
+          const cwr = calculateCupWarriorRating(player, team, match.opponent, match);
           allPlayers.push({
             ...player,
             team: team.name,
             flag: team.flag,
             flagImage: team.flagImage,
-            group: team.group
+            group: team.group,
+            opponent: match.opponent.name,
+            cwr: cwr,
+            teamObject: team
           });
         });
       });
@@ -1877,34 +2222,25 @@
     }
 
     function playerRow(player) {
-      const photo = playerImagePath(player.name);
-      const initials = getInitials(player.name);
-
       return `
         <div class="player-list-row">
-          <div class="small-player-avatar">
-            <img
-              src="${photo}"
-              alt="${player.name}"
-              onerror="fallbackPhoto(this, '${initials}')"
-            />
-          </div>
+          ${playerAvatar(player, player.teamObject, "small")}
 
           <div>
             <strong>${player.name}</strong><br />
             <span style="color:#94a3b8; font-size:13px;">
-              ${player.flag} ${player.team} · ${player.role}
+              ${player.flag} ${player.team} · ${player.role} · vs ${player.opponent}
             </span>
           </div>
 
-          <div class="stat-pill">${player.heat} Heat</div>
+          <div class="warrior-pill">${player.cwr.rating} CWR</div>
         </div>
       `;
     }
 
     function renderPlayerSections() {
       const players = getAllPlayers().sort(function(a, b) {
-        return b.heat - a.heat;
+        return b.cwr.rating - a.cwr.rating;
       });
 
       const creators = players.filter(function(player) {
@@ -1936,9 +2272,68 @@
         .join("");
     }
 
+    function topWarriorsForTeam(team, opponent, match, limit) {
+      if (!team.players) return [];
+
+      return team.players
+        .map(function(player) {
+          return {
+            player: player,
+            cwr: calculateCupWarriorRating(player, team, opponent, match)
+          };
+        })
+        .sort(function(a, b) {
+          return b.cwr.rating - a.cwr.rating;
+        })
+        .slice(0, limit || 3);
+    }
+
+    function warriorRows(team, opponent, match) {
+      const warriors = topWarriorsForTeam(team, opponent, match, 3);
+
+      if (!warriors.length) {
+        return `<p style="color:#94a3b8; line-height:1.5;">No player model loaded yet for ${team.name}.</p>`;
+      }
+
+      return warriors.map(function(item) {
+        return `
+          <div class="warrior-row">
+            ${playerAvatar(item.player, team, "small")}
+
+            <div>
+              <strong>${item.player.name}</strong><br />
+              <span style="color:#94a3b8; font-size:13px;">
+                ${item.player.role} · ${item.player.style}
+              </span>
+            </div>
+
+            <div class="warrior-pill">${item.cwr.rating} CWR</div>
+          </div>
+        `;
+      }).join("");
+    }
+
     function liveGameCard(game) {
       const home = getTeamByName(game.home) || genericOpponent(game.home);
       const away = getTeamByName(game.away) || genericOpponent(game.away);
+
+      const homeMatch = {
+        opponent: away,
+        teamProjectedXG: game.homeXG,
+        opponentProjectedXG: game.awayXG,
+        tempo: game.tempo,
+        possessionEdge: game.possessionEdge,
+        label: away.name
+      };
+
+      const awayMatch = {
+        opponent: home,
+        teamProjectedXG: game.awayXG,
+        opponentProjectedXG: game.homeXG,
+        tempo: game.tempo,
+        possessionEdge: 100 - game.possessionEdge,
+        label: home.name
+      };
 
       return `
         <article class="live-card">
@@ -1999,6 +2394,10 @@
               <strong>${game.upsetRisk}</strong>
             </div>
           </div>
+
+          <div class="warrior-list-title">Top Cup Warriors</div>
+          ${warriorRows(home, away, homeMatch)}
+          ${away.players ? warriorRows(away, home, awayMatch) : ""}
 
           <p class="match-preview-note">
             <strong>Key edge:</strong> ${game.keyEdge}<br />
@@ -2131,28 +2530,54 @@
           <div class="bar-track">
             <div class="bar-fill" style="--width:${value}%"></div>
           </div>
-          <strong>${value}</strong>
+          <strong>${Math.round(value)}</strong>
+        </div>
+      `;
+    }
+
+    function playerCard(player, team, opponent, match) {
+      const cwr = calculateCupWarriorRating(player, team, opponent, match);
+
+      return `
+        <div class="player">
+          <div class="cwr">${cwr.rating} CWR</div>
+
+          ${playerAvatar(player, team, "large")}
+
+          <strong>${player.name}</strong>
+          <span>${player.role}</span>
+
+          <div style="margin-top:12px; display:grid; gap:7px;">
+            <div class="stat-pill">Form ${cwr.form}</div>
+            <div class="stat-pill">Matchup ${cwr.matchup}</div>
+            <div class="stat-pill">Usage ${cwr.usage}</div>
+            <div class="stat-pill">xG Involvement ${cwr.xgInvolvement}</div>
+          </div>
         </div>
       `;
     }
 
     function openTeam(index) {
       const team = teams[index];
+      const match = matchupForTeam(team);
+      const opponent = match.opponent;
 
       homePage.style.display = "none";
       teamPage.style.display = "block";
+
+      const topWarrior = topWarriorsForTeam(team, opponent, match, 1)[0];
 
       teamPage.innerHTML = `
         <button class="back" id="backButton">← Back to all teams</button>
 
         <section class="team-hero" data-flag="${team.flag}">
-          <div class="eyebrow">${team.group} · ${team.region}</div>
+          <div class="eyebrow">${team.group} · ${team.region} · Next vs ${opponent.name}</div>
 
           <h1>${team.name} Pulse</h1>
 
           <p>
-            ${team.identity} This team page tracks player heat, tactical balance,
-            matchup edges, form trend, expected goals, and knockout readiness.
+            ${team.identity} This page tracks Cup Warrior Rating, player impact paths,
+            opposing defensive matchup, projected xG, tactical balance, and knockout readiness.
           </p>
 
           <div class="hero-cards">
@@ -2162,18 +2587,18 @@
             </div>
 
             <div class="hero-card">
-              <span>Heat Leader</span>
-              <strong style="font-size:22px;">${team.star}</strong>
+              <span>Top Warrior</span>
+              <strong style="font-size:22px;">${topWarrior ? topWarrior.player.name : team.star}</strong>
             </div>
 
             <div class="hero-card">
-              <span>Attack Heat</span>
-              <strong>${team.attack}</strong>
+              <span>Projected xG</span>
+              <strong>${Number(match.teamProjectedXG).toFixed(2)}</strong>
             </div>
 
             <div class="hero-card">
-              <span>Squad Depth</span>
-              <strong>${team.depth}</strong>
+              <span>Opponent Defense</span>
+              <strong>${opponent.defense}</strong>
             </div>
 
             <div class="hero-card">
@@ -2201,48 +2626,54 @@
           </div>
 
           <div class="panel">
-            <h3>${team.name} Hot Board</h3>
+            <h3>${team.name} Cup Warriors</h3>
 
             <div class="players">
               ${team.players.map(function(player) {
-                const photo = playerImagePath(player.name);
-                const initials = getInitials(player.name);
-
-                return `
-                  <div class="player">
-                    <div class="heat">${player.heat}</div>
-
-                    <div class="avatar">
-                      <img
-                        class="player-photo"
-                        src="${photo}"
-                        alt="${player.name}"
-                        onerror="fallbackPhoto(this, '${initials}')"
-                      />
-                    </div>
-
-                    <strong>${player.name}</strong>
-                    <span>${player.role}</span>
-                  </div>
-                `;
+                return playerCard(player, team, opponent, match);
               }).join("")}
             </div>
           </div>
 
           <div class="panel">
-            <h3>Match Monitor</h3>
+            <h3>Match Preview</h3>
 
-            ${team.matches.map(function(match) {
-              return `
-                <div class="match">
-                  <div>
-                    <strong>${team.flag} ${team.name} vs ${match[0]}</strong><br />
-                    <span>${match[1]}</span>
-                  </div>
-                  <div class="edge">${match[2]}</div>
-                </div>
-              `;
-            }).join("")}
+            <div class="xg-box">
+              <div class="xg-stat">
+                <span>${team.name} xG</span>
+                <strong>${Number(match.teamProjectedXG).toFixed(2)}</strong>
+              </div>
+
+              <div class="xg-stat">
+                <span>${opponent.name} xG</span>
+                <strong>${Number(match.opponentProjectedXG).toFixed(2)}</strong>
+              </div>
+            </div>
+
+            <div class="preview-stats">
+              <div class="preview-stat">
+                <span>Tempo</span>
+                <strong>${match.tempo}</strong>
+              </div>
+              <div class="preview-stat">
+                <span>Opp DEF</span>
+                <strong>${opponent.defense}</strong>
+              </div>
+              <div class="preview-stat">
+                <span>Attack</span>
+                <strong>${team.attack}</strong>
+              </div>
+              <div class="preview-stat">
+                <span>Transition</span>
+                <strong>${team.transition}</strong>
+              </div>
+            </div>
+
+            <p class="match-preview-note">
+              <strong>CWR logic:</strong> Cup Warrior Rating combines current form,
+              offensive role, expected usage, opponent defensive weakness, projected xG,
+              set-piece value, and game-changing impact paths.
+            </p>
           </div>
         </section>
 
@@ -2259,8 +2690,8 @@
             <h3>Matchup Edge</h3>
             <div class="bars">
               ${bar("Attack vs Defense", team.attack)}
-              ${bar("Midfield Control", Math.round((team.depth + team.defense) / 2))}
-              ${bar("Transition Threat", team.transition)}
+              ${bar("Opponent Vulnerability", clamp(62 + (100 - opponent.defense) * 1.15))}
+              ${bar("Cup Warrior Environment", clamp(match.teamProjectedXG * 25 + team.attack * 0.30 + match.tempo * 0.20 + match.possessionEdge * 0.20))}
               ${bar("Set-Piece Value", Math.round((team.attack + team.defense) / 2))}
             </div>
           </div>
