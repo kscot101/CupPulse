@@ -17,10 +17,15 @@
       --green: #22c55e;
       --yellow: #facc15;
       --purple: #a855f7;
+      --red: #ef4444;
     }
 
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -42,14 +47,14 @@
     .nav {
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
       height: 72px;
       padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border);
-      background: rgba(2, 6, 23, 0.88);
+      background: rgba(2, 6, 23, 0.9);
       backdrop-filter: blur(14px);
     }
 
@@ -80,6 +85,21 @@
       font-weight: 700;
     }
 
+    .nav-tab {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+
+    .nav-tab:hover,
+    .nav-tab.active {
+      color: var(--cyan);
+    }
+
     .nav-pill {
       padding: 10px 14px;
       border: 1px solid var(--border);
@@ -94,8 +114,20 @@
       margin: 0 auto;
     }
 
-    .hero {
+    .route-page {
+      display: none;
+      padding-bottom: 42px;
+    }
+
+    .route-page.active {
+      display: block;
+    }
+
+    .route-page.hero.active {
       display: grid;
+    }
+
+    .hero {
       grid-template-columns: 1.25fr 0.75fr;
       gap: 24px;
       padding: 42px 0 24px;
@@ -105,7 +137,10 @@
     .snapshot,
     .panel,
     .team-card,
-    .team-hero {
+    .team-hero,
+    .wide-card,
+    .feature,
+    .live-card {
       border: 1px solid var(--border);
       background: rgba(8, 17, 31, 0.82);
       box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
@@ -214,13 +249,6 @@
       cursor: pointer;
     }
 
-    .quick-flag {
-      width: 22px;
-      height: 15px;
-      object-fit: cover;
-      border-radius: 3px;
-    }
-
     .snapshot {
       padding: 28px;
       border-radius: 28px;
@@ -230,7 +258,9 @@
     }
 
     .snapshot h3,
-    .panel h3 {
+    .panel h3,
+    .wide-card h3,
+    .live-card h3 {
       margin: 0 0 18px;
       text-transform: uppercase;
       letter-spacing: -1px;
@@ -277,7 +307,7 @@
       align-items: end;
       justify-content: space-between;
       gap: 18px;
-      margin: 26px 0 16px;
+      margin: 42px 0 18px;
     }
 
     h2 {
@@ -326,6 +356,18 @@
         linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.95));
     }
 
+    .team-card::before {
+      content: "";
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.22), transparent 68%);
+      pointer-events: none;
+    }
+
     .team-card:hover {
       transform: translateY(-5px);
       border-color: rgba(96, 165, 250, 0.8);
@@ -335,24 +377,96 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      position: relative;
+      z-index: 2;
     }
 
     .flag {
-      width: 58px;
-      height: 42px;
+      position: relative;
+      width: 72px;
+      height: 54px;
+      padding: 4px;
       display: grid;
       place-items: center;
       overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      font-size: 30px;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, #f8fafc 0%, #94a3b8 18%, #e5e7eb 36%, #475569 55%, #f8fafc 78%, #64748b 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        inset 0 -1px 0 rgba(15, 23, 42, 0.55),
+        0 14px 34px rgba(0, 0, 0, 0.42),
+        0 0 28px rgba(34, 211, 238, 0.2);
+      transform: skew(-5deg);
+      font-size: 28px;
+    }
+
+    .flag::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .flag::after {
+      content: "";
+      position: absolute;
+      left: -35%;
+      top: -70%;
+      width: 58%;
+      height: 240%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+      transform: rotate(24deg);
+      pointer-events: none;
+      z-index: 4;
     }
 
     .flag img {
+      position: relative;
+      z-index: 2;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border-radius: 14px;
+      transform: skew(5deg) scale(1.08);
+      filter: saturate(1.16) contrast(1.08);
+    }
+
+    .team-card:hover .flag {
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -1px 0 rgba(15, 23, 42, 0.55),
+        0 18px 42px rgba(0, 0, 0, 0.5),
+        0 0 36px rgba(34, 211, 238, 0.36);
+    }
+
+    .quick-flag,
+    .leader img,
+    .small-flag {
+      object-fit: cover;
+      border-radius: 9px;
+      padding: 2px;
+      background:
+        linear-gradient(135deg, #f8fafc, #64748b, #e5e7eb, #334155);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.65),
+        0 8px 18px rgba(0, 0, 0, 0.28),
+        0 0 14px rgba(37, 99, 235, 0.18);
+      filter: saturate(1.12) contrast(1.06);
+    }
+
+    .quick-flag {
+      width: 28px;
+      height: 20px;
+    }
+
+    .leader img,
+    .small-flag {
+      width: 48px;
+      height: 34px;
     }
 
     .team-name {
@@ -373,6 +487,8 @@
       align-items: end;
       justify-content: space-between;
       margin: 24px 0 18px;
+      position: relative;
+      z-index: 2;
     }
 
     .score-label {
@@ -402,6 +518,8 @@
       gap: 8px;
       padding-top: 14px;
       border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 2;
     }
 
     .stat span {
@@ -427,6 +545,8 @@
       font-weight: 900;
       text-transform: uppercase;
       cursor: pointer;
+      position: relative;
+      z-index: 2;
     }
 
     .sidebar {
@@ -441,7 +561,7 @@
 
     .leader {
       display: grid;
-      grid-template-columns: 34px 1fr auto;
+      grid-template-columns: 48px 1fr auto;
       gap: 10px;
       align-items: center;
       padding: 11px 0;
@@ -451,13 +571,6 @@
 
     .leader:last-child {
       border-bottom: 0;
-    }
-
-    .leader img {
-      width: 28px;
-      height: 20px;
-      object-fit: cover;
-      border-radius: 4px;
     }
 
     .leader small {
@@ -496,7 +609,6 @@
 
     .feature {
       padding: 18px;
-      border: 1px solid var(--border);
       border-radius: 18px;
       background: rgba(8, 17, 31, 0.76);
     }
@@ -516,6 +628,194 @@
       color: var(--muted);
       font-size: 13px;
       line-height: 1.5;
+    }
+
+    .extra-section {
+      margin: 0 0 36px;
+    }
+
+    .extra-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .wide-card {
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(8, 17, 31, 0.78);
+    }
+
+    .player-list-row,
+    .match-list-row,
+    .group-list-row {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .player-list-row:last-child,
+    .match-list-row:last-child,
+    .group-list-row:last-child {
+      border-bottom: 0;
+    }
+
+    .small-player-avatar {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 15px;
+      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.45), transparent 35%),
+        linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(168, 85, 247, 0.72));
+      color: white;
+      font-weight: 900;
+    }
+
+    .small-player-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stat-pill {
+      padding: 7px 10px;
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      border-radius: 999px;
+      color: #bfdbfe;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .live-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .live-card {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(34, 211, 238, 0.16), transparent 36%),
+        linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.94));
+    }
+
+    .live-card::before {
+      content: "LIVE PREVIEW";
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      padding: 6px 9px;
+      border: 1px solid rgba(34, 211, 238, 0.42);
+      border-radius: 999px;
+      color: var(--cyan);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .match-teams {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .match-team {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .match-team.away {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .match-team-name {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+    .vs {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .xg-box {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .xg-stat {
+      padding: 14px;
+      border: 1px solid rgba(96, 165, 250, 0.28);
+      border-radius: 16px;
+      background: rgba(2, 6, 23, 0.5);
+    }
+
+    .xg-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .xg-stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 34px;
+      letter-spacing: -2px;
+    }
+
+    .preview-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .preview-stat {
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .preview-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .preview-stat strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 17px;
+    }
+
+    .match-preview-note {
+      margin-top: 16px;
+      color: #cbd5e1;
+      line-height: 1.55;
     }
 
     #teamPage {
@@ -664,8 +964,10 @@
       margin-bottom: 12px;
       border-radius: 22px;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.75), rgba(168, 85, 247, 0.55));
-      font-size: 20px;
+      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.45), transparent 35%),
+        linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(168, 85, 247, 0.72));
+      font-size: 18px;
       font-weight: 900;
       color: white;
     }
@@ -675,19 +977,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-
-    .photo-fallback {
-      width: 100%;
-      height: 100%;
-      display: none;
-      place-items: center;
-      background:
-        radial-gradient(circle at top left, rgba(34, 211, 238, 0.45), transparent 35%),
-        linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(168, 85, 247, 0.72));
-      color: white;
-      font-size: 18px;
-      font-weight: 900;
     }
 
     .heat {
@@ -767,16 +1056,33 @@
       }
 
       .features,
-      .hero-cards {
+      .hero-cards,
+      .extra-grid,
+      .live-grid {
         grid-template-columns: repeat(2, 1fr);
       }
 
       .nav-links {
-        display: none;
+        gap: 12px;
       }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero,
+      .teams,
+      .features,
+      .hero-cards,
+      .players,
+      .snapshot-grid,
+      .extra-grid,
+      .live-grid {
+        grid-template-columns: 1fr;
+      }
+
       .container {
         width: min(100% - 28px, 1400px);
       }
@@ -795,16 +1101,21 @@
         letter-spacing: -3px;
       }
 
-      .teams,
-      .features,
-      .hero-cards,
-      .players,
-      .snapshot-grid {
+      .bar {
+        grid-template-columns: 110px 1fr 35px;
+      }
+
+      .match-teams {
         grid-template-columns: 1fr;
       }
 
-      .bar {
-        grid-template-columns: 110px 1fr 35px;
+      .match-team.away {
+        justify-content: flex-start;
+        text-align: left;
+      }
+
+      .preview-stats {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
@@ -818,18 +1129,19 @@
     </div>
 
     <div class="nav-links">
-      <span>Home</span>
-      <span>Teams</span>
-      <span>Players</span>
-      <span>Matches</span>
-      <span>Groups</span>
+      <button class="nav-tab active" data-target="homeTop">Home</button>
+      <button class="nav-tab" data-target="teamsSection">Teams</button>
+      <button class="nav-tab" data-target="playersSection">Players</button>
+      <button class="nav-tab" data-target="liveSection">Live</button>
+      <button class="nav-tab" data-target="matchesSection">Matches</button>
+      <button class="nav-tab" data-target="groupsSection">Groups</button>
     </div>
 
     <div class="nav-pill">World Cup 2026</div>
   </header>
 
   <main id="homePage" class="container">
-    <section class="hero">
+    <section id="homeTop" class="hero route-page active">
       <div class="hero-main">
         <div class="eyebrow">World Cup 2026 Analytics Hub</div>
 
@@ -840,8 +1152,8 @@
 
         <p>
           CupPulse is a dark dashboard for every World Cup team page.
-          Search a country, open its dashboard, and see player heat, squad depth,
-          tactical identity, matchup edges, and knockout-readiness signals.
+          Search a country, open its dashboard, and see player heat, expected goals,
+          squad depth, tactical identity, matchup edges, and knockout-readiness signals.
         </p>
 
         <div class="search">
@@ -878,7 +1190,7 @@
       </aside>
     </section>
 
-    <section>
+    <section id="teamsSection" class="route-page">
       <div class="section-head">
         <h2>All Team Pages</h2>
 
@@ -919,15 +1231,15 @@
             </div>
 
             <div class="feature">
-              <div>⚔️</div>
-              <strong>Matchup Edges</strong>
-              <span>Break down where each team can create tactical advantages.</span>
+              <div>📈</div>
+              <strong>Expected Goals</strong>
+              <span>Preview each contest with projected xG and match control signals.</span>
             </div>
 
             <div class="feature">
-              <div>🧠</div>
-              <strong>Team Identity</strong>
-              <span>Every team gets a clear style profile and contender snapshot.</span>
+              <div>⚔️</div>
+              <strong>Matchup Edges</strong>
+              <span>Break down where each team can create tactical advantages.</span>
             </div>
 
             <div class="feature">
@@ -962,6 +1274,68 @@
         </aside>
       </div>
     </section>
+
+    <section id="playersSection" class="extra-section route-page">
+      <div class="section-head">
+        <h2>Player Heat</h2>
+      </div>
+
+      <div class="extra-grid">
+        <div class="wide-card">
+          <h3>Top Hot Players</h3>
+          <div id="topPlayersList"></div>
+        </div>
+
+        <div class="wide-card">
+          <h3>Creators to Watch</h3>
+          <div id="creatorPlayersList"></div>
+        </div>
+
+        <div class="wide-card">
+          <h3>Defensive Anchors</h3>
+          <div id="defenderPlayersList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="liveSection" class="extra-section route-page">
+      <div class="section-head">
+        <h2>Live Games</h2>
+      </div>
+
+      <div class="live-grid" id="liveGamesGrid"></div>
+    </section>
+
+    <section id="matchesSection" class="extra-section route-page">
+      <div class="section-head">
+        <h2>Match Monitor</h2>
+      </div>
+
+      <div class="extra-grid">
+        <div class="wide-card">
+          <h3>Featured Matchups</h3>
+          <div id="featuredMatchesList"></div>
+        </div>
+
+        <div class="wide-card">
+          <h3>Upset Watch</h3>
+          <div id="upsetMatchesList"></div>
+        </div>
+
+        <div class="wide-card">
+          <h3>Contender Tests</h3>
+          <div id="contenderMatchesList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="groupsSection" class="extra-section route-page">
+      <div class="section-head">
+        <h2>Groups</h2>
+      </div>
+
+      <div class="extra-grid" id="groupsGrid"></div>
+    </section>
   </main>
 
   <main id="teamPage" class="container"></main>
@@ -984,12 +1358,12 @@
         star: "Kylian Mbappé",
         identity: "Elite transition danger, world-class squad depth, and knockout reliability.",
         players: [
-          { name: "Kylian Mbappé", role: "Forward", heat: 97, photo: "images/players/mbappe.jpg" },
-          { name: "Ousmane Dembélé", role: "Winger", heat: 91, photo: "images/players/dembele.jpg" },
-          { name: "William Saliba", role: "Defender", heat: 89, photo: "images/players/saliba.jpg" },
-          { name: "Aurélien Tchouaméni", role: "Midfield", heat: 88, photo: "images/players/tchouameni.jpg" },
-          { name: "Antoine Griezmann", role: "Creator", heat: 87, photo: "images/players/griezmann.jpg" },
-          { name: "Eduardo Camavinga", role: "Utility", heat: 86, photo: "images/players/camavinga.jpg" }
+          { name: "Kylian Mbappé", role: "Forward", heat: 97 },
+          { name: "Ousmane Dembélé", role: "Winger", heat: 91 },
+          { name: "William Saliba", role: "Defender", heat: 89 },
+          { name: "Aurélien Tchouaméni", role: "Midfield", heat: 88 },
+          { name: "Antoine Griezmann", role: "Creator", heat: 87 },
+          { name: "Eduardo Camavinga", role: "Utility", heat: 86 }
         ],
         matches: [
           ["Senegal", "Physical test", "Transition speed"],
@@ -1013,12 +1387,12 @@
         star: "Vinícius Júnior",
         identity: "Explosive wide play, creative flair, and elite attacking volume.",
         players: [
-          { name: "Vinícius Júnior", role: "Winger", heat: 96, photo: "images/players/vinicius.jpg" },
-          { name: "Rodrygo", role: "Forward", heat: 90, photo: "images/players/rodrygo.jpg" },
-          { name: "Bruno Guimarães", role: "Midfield", heat: 88, photo: "images/players/bruno-guimaraes.jpg" },
-          { name: "Éder Militão", role: "Defender", heat: 87, photo: "images/players/militao.jpg" },
-          { name: "Alisson", role: "Goalkeeper", heat: 86, photo: "images/players/alisson.jpg" },
-          { name: "Raphinha", role: "Winger", heat: 85, photo: "images/players/raphinha.jpg" }
+          { name: "Vinícius Júnior", role: "Winger", heat: 96 },
+          { name: "Rodrygo", role: "Forward", heat: 90 },
+          { name: "Bruno Guimarães", role: "Midfield", heat: 88 },
+          { name: "Éder Militão", role: "Defender", heat: 87 },
+          { name: "Alisson", role: "Goalkeeper", heat: 86 },
+          { name: "Raphinha", role: "Winger", heat: 85 }
         ],
         matches: [
           ["Morocco", "Pressure test", "Wide overloads"],
@@ -1042,12 +1416,12 @@
         star: "Lionel Messi",
         identity: "Control, experience, central combinations, and set-piece danger.",
         players: [
-          { name: "Lionel Messi", role: "Creator", heat: 94, photo: "images/players/messi.jpg" },
-          { name: "Lautaro Martínez", role: "Forward", heat: 90, photo: "images/players/lautaro.jpg" },
-          { name: "Julián Álvarez", role: "Forward", heat: 89, photo: "images/players/julian-alvarez.jpg" },
-          { name: "Alexis Mac Allister", role: "Midfield", heat: 88, photo: "images/players/mac-allister.jpg" },
-          { name: "Cristian Romero", role: "Defender", heat: 87, photo: "images/players/romero.jpg" },
-          { name: "Emiliano Martínez", role: "Goalkeeper", heat: 86, photo: "images/players/emiliano-martinez.jpg" }
+          { name: "Lionel Messi", role: "Creator", heat: 94 },
+          { name: "Lautaro Martínez", role: "Forward", heat: 90 },
+          { name: "Julián Álvarez", role: "Forward", heat: 89 },
+          { name: "Alexis Mac Allister", role: "Midfield", heat: 88 },
+          { name: "Cristian Romero", role: "Defender", heat: 87 },
+          { name: "Emiliano Martínez", role: "Goalkeeper", heat: 86 }
         ],
         matches: [
           ["Algeria", "Compact opponent", "Tempo control"],
@@ -1071,12 +1445,12 @@
         star: "Jude Bellingham",
         identity: "Midfield power, attacking depth, and a strong defensive floor.",
         players: [
-          { name: "Jude Bellingham", role: "Midfield", heat: 94, photo: "images/players/bellingham.jpg" },
-          { name: "Harry Kane", role: "Forward", heat: 91, photo: "images/players/kane.jpg" },
-          { name: "Bukayo Saka", role: "Winger", heat: 90, photo: "images/players/saka.jpg" },
-          { name: "Declan Rice", role: "Midfield", heat: 88, photo: "images/players/rice.jpg" },
-          { name: "Phil Foden", role: "Creator", heat: 87, photo: "images/players/foden.jpg" },
-          { name: "John Stones", role: "Defender", heat: 85, photo: "images/players/stones.jpg" }
+          { name: "Jude Bellingham", role: "Midfield", heat: 94 },
+          { name: "Harry Kane", role: "Forward", heat: 91 },
+          { name: "Bukayo Saka", role: "Winger", heat: 90 },
+          { name: "Declan Rice", role: "Midfield", heat: 88 },
+          { name: "Phil Foden", role: "Creator", heat: 87 },
+          { name: "John Stones", role: "Defender", heat: 85 }
         ],
         matches: [
           ["Croatia", "Tournament test", "Midfield control"],
@@ -1100,12 +1474,12 @@
         star: "Lamine Yamal",
         identity: "Possession control, technical quality, and final-third patience.",
         players: [
-          { name: "Lamine Yamal", role: "Winger", heat: 91, photo: "images/players/yamal.jpg" },
-          { name: "Rodri", role: "Midfield", heat: 92, photo: "images/players/rodri.jpg" },
-          { name: "Pedri", role: "Creator", heat: 89, photo: "images/players/pedri.jpg" },
-          { name: "Nico Williams", role: "Winger", heat: 88, photo: "images/players/nico-williams.jpg" },
-          { name: "Dani Olmo", role: "Creator", heat: 86, photo: "images/players/olmo.jpg" },
-          { name: "Aymeric Laporte", role: "Defender", heat: 84, photo: "images/players/laporte.jpg" }
+          { name: "Lamine Yamal", role: "Winger", heat: 91 },
+          { name: "Rodri", role: "Midfield", heat: 92 },
+          { name: "Pedri", role: "Creator", heat: 89 },
+          { name: "Nico Williams", role: "Winger", heat: 88 },
+          { name: "Dani Olmo", role: "Creator", heat: 86 },
+          { name: "Aymeric Laporte", role: "Defender", heat: 84 }
         ],
         matches: [
           ["Uruguay", "High-level test", "Possession control"],
@@ -1129,12 +1503,12 @@
         star: "Bruno Fernandes",
         identity: "Creative passing, technical attackers, and high individual upside.",
         players: [
-          { name: "Bruno Fernandes", role: "Creator", heat: 91, photo: "images/players/bruno-fernandes.jpg" },
-          { name: "Bernardo Silva", role: "Creator", heat: 89, photo: "images/players/bernardo-silva.jpg" },
-          { name: "Rafael Leão", role: "Winger", heat: 88, photo: "images/players/leao.jpg" },
-          { name: "Cristiano Ronaldo", role: "Forward", heat: 87, photo: "images/players/ronaldo.jpg" },
-          { name: "Rúben Dias", role: "Defender", heat: 86, photo: "images/players/ruben-dias.jpg" },
-          { name: "Diogo Costa", role: "Goalkeeper", heat: 85, photo: "images/players/diogo-costa.jpg" }
+          { name: "Bruno Fernandes", role: "Creator", heat: 91 },
+          { name: "Bernardo Silva", role: "Creator", heat: 89 },
+          { name: "Rafael Leão", role: "Winger", heat: 88 },
+          { name: "Cristiano Ronaldo", role: "Forward", heat: 87 },
+          { name: "Rúben Dias", role: "Defender", heat: 86 },
+          { name: "Diogo Costa", role: "Goalkeeper", heat: 85 }
         ],
         matches: [
           ["Colombia", "Chaos game", "Creative passing"],
@@ -1158,12 +1532,12 @@
         star: "Jamal Musiala",
         identity: "Technical midfield play, chance creation, and structured possession.",
         players: [
-          { name: "Jamal Musiala", role: "Creator", heat: 91, photo: "images/players/musiala.jpg" },
-          { name: "Florian Wirtz", role: "Creator", heat: 90, photo: "images/players/wirtz.jpg" },
-          { name: "Kai Havertz", role: "Forward", heat: 86, photo: "images/players/havertz.jpg" },
-          { name: "Joshua Kimmich", role: "Midfield", heat: 85, photo: "images/players/kimmich.jpg" },
-          { name: "Antonio Rüdiger", role: "Defender", heat: 84, photo: "images/players/rudiger.jpg" },
-          { name: "Marc-André ter Stegen", role: "Goalkeeper", heat: 84, photo: "images/players/ter-stegen.jpg" }
+          { name: "Jamal Musiala", role: "Creator", heat: 91 },
+          { name: "Florian Wirtz", role: "Creator", heat: 90 },
+          { name: "Kai Havertz", role: "Forward", heat: 86 },
+          { name: "Joshua Kimmich", role: "Midfield", heat: 85 },
+          { name: "Antonio Rüdiger", role: "Defender", heat: 84 },
+          { name: "Marc-André ter Stegen", role: "Goalkeeper", heat: 84 }
         ],
         matches: [
           ["Ecuador", "Pressing test", "Central creation"],
@@ -1187,18 +1561,76 @@
         star: "Virgil van Dijk",
         identity: "Defensive structure, aerial power, and direct attacking outlets.",
         players: [
-          { name: "Virgil van Dijk", role: "Defender", heat: 90, photo: "images/players/van-dijk.jpg" },
-          { name: "Frenkie de Jong", role: "Midfield", heat: 88, photo: "images/players/frenkie.jpg" },
-          { name: "Cody Gakpo", role: "Forward", heat: 87, photo: "images/players/gakpo.jpg" },
-          { name: "Xavi Simons", role: "Creator", heat: 86, photo: "images/players/xavi-simons.jpg" },
-          { name: "Denzel Dumfries", role: "Wingback", heat: 84, photo: "images/players/dumfries.jpg" },
-          { name: "Matthijs de Ligt", role: "Defender", heat: 83, photo: "images/players/de-ligt.jpg" }
+          { name: "Virgil van Dijk", role: "Defender", heat: 90 },
+          { name: "Frenkie de Jong", role: "Midfield", heat: 88 },
+          { name: "Cody Gakpo", role: "Forward", heat: 87 },
+          { name: "Xavi Simons", role: "Creator", heat: 86 },
+          { name: "Denzel Dumfries", role: "Wingback", heat: 84 },
+          { name: "Matthijs de Ligt", role: "Defender", heat: 83 }
         ],
         matches: [
           ["Belgium", "Derby test", "Defensive structure"],
           ["Japan", "Tempo test", "Aerial edge"],
           ["Tunisia", "Control game", "Direct outlets"]
         ]
+      }
+    ];
+
+    const extraTeams = {
+      Senegal: { name: "Senegal", flag: "🇸🇳", flagImage: "https://flagcdn.com/w160/sn.png", pulse: 81, attack: 79, defense: 82, depth: 78, transition: 84 },
+      Morocco: { name: "Morocco", flag: "🇲🇦", flagImage: "https://flagcdn.com/w160/ma.png", pulse: 84, attack: 82, defense: 86, depth: 80, transition: 81 },
+      Austria: { name: "Austria", flag: "🇦🇹", flagImage: "https://flagcdn.com/w160/at.png", pulse: 80, attack: 78, defense: 81, depth: 79, transition: 82 },
+      Croatia: { name: "Croatia", flag: "🇭🇷", flagImage: "https://flagcdn.com/w160/hr.png", pulse: 82, attack: 80, defense: 83, depth: 81, transition: 76 }
+    };
+
+    const liveGames = [
+      {
+        home: "France",
+        away: "Senegal",
+        homeXG: 1.92,
+        awayXG: 1.08,
+        tempo: 78,
+        pressEdge: "France +9",
+        setPieceEdge: "Even",
+        upsetRisk: "Medium",
+        keyEdge: "France transition speed against Senegal athleticism.",
+        note: "France project for stronger chance quality, but Senegal's physical profile creates counterattack risk."
+      },
+      {
+        home: "Brazil",
+        away: "Morocco",
+        homeXG: 2.05,
+        awayXG: 1.21,
+        tempo: 82,
+        pressEdge: "Brazil +6",
+        setPieceEdge: "Morocco +3",
+        upsetRisk: "Medium",
+        keyEdge: "Brazil wide overloads versus Morocco's compact block.",
+        note: "Brazil carry the higher attacking ceiling, but Morocco's defensive structure can drag this into a lower-margin match."
+      },
+      {
+        home: "Argentina",
+        away: "Austria",
+        homeXG: 1.68,
+        awayXG: 1.02,
+        tempo: 69,
+        pressEdge: "Austria +4",
+        setPieceEdge: "Argentina +5",
+        upsetRisk: "Low",
+        keyEdge: "Argentina tempo control and final-third patience.",
+        note: "Argentina rate higher in control and shot quality, while Austria's best path is pressure and midfield disruption."
+      },
+      {
+        home: "England",
+        away: "Croatia",
+        homeXG: 1.57,
+        awayXG: 1.18,
+        tempo: 72,
+        pressEdge: "England +2",
+        setPieceEdge: "England +7",
+        upsetRisk: "Medium",
+        keyEdge: "England's set-piece edge and midfield power.",
+        note: "England have the stronger depth profile, but Croatia's tournament experience keeps the matchup volatile."
       }
     ];
 
@@ -1216,6 +1648,19 @@
     const regionFilter = document.getElementById("regionFilter");
     const sortFilter = document.getElementById("sortFilter");
     const chooseTeamButton = document.getElementById("chooseTeamButton");
+
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    }
+
+    function playerImagePath(playerName) {
+      return "images/players/" + slugify(playerName) + ".jpg";
+    }
 
     function getInitials(name) {
       return name
@@ -1235,8 +1680,38 @@
 
     function fallbackPhoto(img, initials) {
       img.style.display = "none";
-      img.nextElementSibling.style.display = "grid";
-      img.nextElementSibling.textContent = initials;
+      img.parentElement.textContent = initials;
+    }
+
+    function showRoute(targetId) {
+      if (teamPage.style.display === "block") {
+        teamPage.style.display = "none";
+        homePage.style.display = "block";
+      }
+
+      document.querySelectorAll(".route-page").forEach(function(page) {
+        page.classList.remove("active");
+      });
+
+      const target = document.getElementById(targetId);
+
+      if (target) {
+        target.classList.add("active");
+      }
+
+      document.querySelectorAll(".nav-tab").forEach(function(tab) {
+        tab.classList.toggle("active", tab.dataset.target === targetId);
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function setupNavTabs() {
+      document.querySelectorAll(".nav-tab").forEach(function(tab) {
+        tab.addEventListener("click", function() {
+          showRoute(tab.dataset.target);
+        });
+      });
     }
 
     function getFilteredTeams() {
@@ -1251,6 +1726,25 @@
       });
 
       return filtered;
+    }
+
+    function getTeamByName(name) {
+      return teams.find(function(team) {
+        return team.name.toLowerCase() === name.toLowerCase();
+      }) || extraTeams[name];
+    }
+
+    function genericOpponent(name) {
+      return {
+        name: name,
+        flag: "🏳️",
+        flagImage: "https://flagcdn.com/w160/un.png",
+        pulse: 78,
+        attack: 78,
+        defense: 78,
+        depth: 76,
+        transition: 76
+      };
     }
 
     function renderQuickTeams() {
@@ -1285,9 +1779,9 @@
           <article class="team-card" data-team="${index}">
             <div class="team-top">
               <div class="flag">
-                <img 
-                  src="${team.flagImage}" 
-                  alt="${team.name} flag" 
+                <img
+                  src="${team.flagImage}"
+                  alt="${team.name} flag"
                   onerror="fallbackFlag(this, '${team.flag}')"
                 />
               </div>
@@ -1364,6 +1858,261 @@
       });
     }
 
+    function getAllPlayers() {
+      let allPlayers = [];
+
+      teams.forEach(function(team) {
+        team.players.forEach(function(player) {
+          allPlayers.push({
+            ...player,
+            team: team.name,
+            flag: team.flag,
+            flagImage: team.flagImage,
+            group: team.group
+          });
+        });
+      });
+
+      return allPlayers;
+    }
+
+    function playerRow(player) {
+      const photo = playerImagePath(player.name);
+      const initials = getInitials(player.name);
+
+      return `
+        <div class="player-list-row">
+          <div class="small-player-avatar">
+            <img
+              src="${photo}"
+              alt="${player.name}"
+              onerror="fallbackPhoto(this, '${initials}')"
+            />
+          </div>
+
+          <div>
+            <strong>${player.name}</strong><br />
+            <span style="color:#94a3b8; font-size:13px;">
+              ${player.flag} ${player.team} · ${player.role}
+            </span>
+          </div>
+
+          <div class="stat-pill">${player.heat} Heat</div>
+        </div>
+      `;
+    }
+
+    function renderPlayerSections() {
+      const players = getAllPlayers().sort(function(a, b) {
+        return b.heat - a.heat;
+      });
+
+      const creators = players.filter(function(player) {
+        return player.role.includes("Creator") ||
+          player.role.includes("Winger") ||
+          player.role.includes("Midfield") ||
+          player.role.includes("Forward");
+      });
+
+      const defenders = players.filter(function(player) {
+        return player.role.includes("Defender") ||
+          player.role.includes("Goalkeeper") ||
+          player.role.includes("Wingback");
+      });
+
+      document.getElementById("topPlayersList").innerHTML = players
+        .slice(0, 8)
+        .map(playerRow)
+        .join("");
+
+      document.getElementById("creatorPlayersList").innerHTML = creators
+        .slice(0, 8)
+        .map(playerRow)
+        .join("");
+
+      document.getElementById("defenderPlayersList").innerHTML = defenders
+        .slice(0, 8)
+        .map(playerRow)
+        .join("");
+    }
+
+    function liveGameCard(game) {
+      const home = getTeamByName(game.home) || genericOpponent(game.home);
+      const away = getTeamByName(game.away) || genericOpponent(game.away);
+
+      return `
+        <article class="live-card">
+          <div class="match-teams">
+            <div class="match-team">
+              <div class="flag">
+                <img src="${home.flagImage}" alt="${home.name} flag" onerror="fallbackFlag(this, '${home.flag}')" />
+              </div>
+              <div>
+                <div class="match-team-name">${home.name}</div>
+                <div class="group">Pulse ${home.pulse}</div>
+              </div>
+            </div>
+
+            <div class="vs">VS</div>
+
+            <div class="match-team away">
+              <div>
+                <div class="match-team-name">${away.name}</div>
+                <div class="group">Pulse ${away.pulse}</div>
+              </div>
+              <div class="flag">
+                <img src="${away.flagImage}" alt="${away.name} flag" onerror="fallbackFlag(this, '${away.flag}')" />
+              </div>
+            </div>
+          </div>
+
+          <div class="xg-box">
+            <div class="xg-stat">
+              <span>${home.name} Expected Goals</span>
+              <strong>${game.homeXG.toFixed(2)}</strong>
+            </div>
+
+            <div class="xg-stat">
+              <span>${away.name} Expected Goals</span>
+              <strong>${game.awayXG.toFixed(2)}</strong>
+            </div>
+          </div>
+
+          <div class="preview-stats">
+            <div class="preview-stat">
+              <span>Tempo</span>
+              <strong>${game.tempo}</strong>
+            </div>
+
+            <div class="preview-stat">
+              <span>Press Edge</span>
+              <strong>${game.pressEdge}</strong>
+            </div>
+
+            <div class="preview-stat">
+              <span>Set Pieces</span>
+              <strong>${game.setPieceEdge}</strong>
+            </div>
+
+            <div class="preview-stat">
+              <span>Upset Risk</span>
+              <strong>${game.upsetRisk}</strong>
+            </div>
+          </div>
+
+          <p class="match-preview-note">
+            <strong>Key edge:</strong> ${game.keyEdge}<br />
+            ${game.note}
+          </p>
+        </article>
+      `;
+    }
+
+    function renderLiveGames() {
+      document.getElementById("liveGamesGrid").innerHTML = liveGames.map(liveGameCard).join("");
+    }
+
+    function matchRow(team, match) {
+      return `
+        <div class="match-list-row">
+          <img class="small-flag" src="${team.flagImage}" alt="${team.name} flag" />
+
+          <div>
+            <strong>${team.name} vs ${match[0]}</strong><br />
+            <span style="color:#94a3b8; font-size:13px;">
+              ${match[1]}
+            </span>
+          </div>
+
+          <div class="stat-pill">${match[2]}</div>
+        </div>
+      `;
+    }
+
+    function renderMatchSections() {
+      const allMatches = [];
+
+      teams.forEach(function(team) {
+        team.matches.forEach(function(match) {
+          allMatches.push({ team: team, match: match });
+        });
+      });
+
+      document.getElementById("featuredMatchesList").innerHTML = allMatches
+        .slice(0, 8)
+        .map(function(item) {
+          return matchRow(item.team, item.match);
+        })
+        .join("");
+
+      document.getElementById("upsetMatchesList").innerHTML = allMatches
+        .filter(function(item) {
+          return item.match[1].toLowerCase().includes("test") ||
+            item.match[1].toLowerCase().includes("chaos") ||
+            item.match[1].toLowerCase().includes("matchup");
+        })
+        .slice(0, 8)
+        .map(function(item) {
+          return matchRow(item.team, item.match);
+        })
+        .join("");
+
+      document.getElementById("contenderMatchesList").innerHTML = teams
+        .slice(0, 8)
+        .map(function(team) {
+          return matchRow(team, team.matches[0]);
+        })
+        .join("");
+    }
+
+    function renderGroupsSection() {
+      const groups = {};
+
+      teams.forEach(function(team) {
+        if (!groups[team.group]) {
+          groups[team.group] = [];
+        }
+
+        groups[team.group].push(team);
+      });
+
+      document.getElementById("groupsGrid").innerHTML = Object.keys(groups)
+        .sort()
+        .map(function(groupName) {
+          const groupTeams = groups[groupName].sort(function(a, b) {
+            return b.pulse - a.pulse;
+          });
+
+          return `
+            <div class="wide-card">
+              <h3>${groupName}</h3>
+
+              ${groupTeams.map(function(team) {
+                return `
+                  <div class="group-list-row" data-team="${teams.indexOf(team)}" style="cursor:pointer;">
+                    <img class="small-flag" src="${team.flagImage}" alt="${team.name} flag" />
+
+                    <div>
+                      <strong>${team.name}</strong><br />
+                      <span style="color:#94a3b8; font-size:13px;">${team.region}</span>
+                    </div>
+
+                    <div class="stat-pill">${team.pulse}</div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          `;
+        })
+        .join("");
+
+      document.querySelectorAll(".group-list-row").forEach(function(row) {
+        row.addEventListener("click", function() {
+          openTeam(Number(row.dataset.team));
+        });
+      });
+    }
+
     function gradeToNumber(grade) {
       const grades = {
         "A": 94,
@@ -1403,7 +2152,7 @@
 
           <p>
             ${team.identity} This team page tracks player heat, tactical balance,
-            matchup edges, form trend, and knockout readiness.
+            matchup edges, form trend, expected goals, and knockout readiness.
           </p>
 
           <div class="hero-cards">
@@ -1456,18 +2205,20 @@
 
             <div class="players">
               ${team.players.map(function(player) {
+                const photo = playerImagePath(player.name);
+                const initials = getInitials(player.name);
+
                 return `
                   <div class="player">
                     <div class="heat">${player.heat}</div>
 
                     <div class="avatar">
-                      <img 
-                        class="player-photo" 
-                        src="${player.photo}" 
+                      <img
+                        class="player-photo"
+                        src="${photo}"
                         alt="${player.name}"
-                        onerror="fallbackPhoto(this, '${getInitials(player.name)}')"
+                        onerror="fallbackPhoto(this, '${initials}')"
                       />
-                      <div class="photo-fallback">${getInitials(player.name)}</div>
                     </div>
 
                     <strong>${player.name}</strong>
@@ -1551,7 +2302,7 @@
     function backHome() {
       teamPage.style.display = "none";
       homePage.style.display = "block";
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      showRoute("teamsSection");
     }
 
     searchInput.addEventListener("input", function(event) {
@@ -1561,6 +2312,7 @@
 
     searchButton.addEventListener("click", function() {
       const filtered = getFilteredTeams();
+
       if (filtered.length > 0) {
         openTeam(teams.indexOf(filtered[0]));
       }
@@ -1577,12 +2329,18 @@
     });
 
     chooseTeamButton.addEventListener("click", function() {
-      document.querySelector(".section-head").scrollIntoView({ behavior: "smooth" });
+      showRoute("teamsSection");
     });
 
+    setupNavTabs();
     renderQuickTeams();
     renderTeams();
     renderLeaderboard();
+    renderPlayerSections();
+    renderLiveGames();
+    renderMatchSections();
+    renderGroupsSection();
+    showRoute("homeTop");
   </script>
 </body>
 </html>
